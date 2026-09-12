@@ -1,4 +1,3 @@
-// src/main.js
 import { createApp } from 'vue';
 import axios from 'axios';
 
@@ -8,10 +7,19 @@ createApp({
       todoLists: []
     }
   },
+  methods: {
+    updateData(data) {
+      console.log("New Data", data);
+      this.todoLists = data;
+    }
+  },
   mounted() {
+    console.log("HI! I'm starting.");
     axios.get('/api/todo-lists')
       .then(response => {
-        this.todoLists = response.data;
+        console.log("Got response", response.data);
+        this.updateData(response.data?._embedded?.todoListList);
+        //window.todoLists = this.todoLists;
       })
       .catch(error => {
         console.error(error);
