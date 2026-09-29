@@ -41,11 +41,15 @@ createApp({
       });
   },
   template: `
+    <p><strong>Current route path:</strong> {{ $route.fullPath }}</p>
     <ol>
       <li v-for="todoList in todoLists" :key="todoList.id">
         {{ todoList.title }}
         <router-link :to="{ name: 'todoList', params: { id: todoList.id } }">View {{ todoList.title }}</router-link>
       </li>
     </ol>
+    <main>
+      <router-view />
+    </main>
   `
 }).use(router).mount('#app');
