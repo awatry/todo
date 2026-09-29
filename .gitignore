@@ -1,2 +1,8 @@
+**/node_modules/
 dist/
 target/
+
+**/.classpath
+**/.factorypath
+**/.project
+**/.settings
