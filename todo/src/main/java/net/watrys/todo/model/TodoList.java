@@ -38,10 +38,14 @@ public class TodoList {
     @Column(nullable = false)
     protected Integer position;
 
-    @Column(nullable = false)
+    @OneToMany(mappedBy = "todoList", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OrderBy("position ASC")
+    private List<ListItem> topLevelItems;
+
+    @Column(nullable = false, updatable = false)
     protected Integer createdUser;
 
-    @Column(nullable = false)
+    @Column(nullable = false, updatable = false)
     protected Instant createdAt;
 
     @Column(nullable = false)
@@ -49,6 +53,11 @@ public class TodoList {
 
     @Column(nullable = false)
     protected Instant updatedAt;
+
+    public TodoList(String title, Integer position) {
+        this.title = title;
+        this.position = position;
+    }
 
     @PrePersist
     private void prePersist() {
@@ -63,12 +72,4 @@ public class TodoList {
         this.updatedAt = Instant.now();
     }
 
-    @OneToMany(mappedBy = "todoList", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    @OrderBy("position ASC")
-    private List<ListItem> topLevelItems;
-
-    public TodoList(String title, Integer position) {
-        this.title = title;
-        this.position = position;
-    }
 }

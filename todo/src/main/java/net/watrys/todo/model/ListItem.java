@@ -44,22 +44,23 @@ public class ListItem {
     @Column(nullable = false)
     protected Integer position;
 
-    @Column(nullable = false)
+    @Column(nullable = false, updatable = false)
     protected Integer createdUser;
 
-    @Column(nullable = false)
+    @Column(nullable = false, updatable = false)
     protected Instant createdAt;
 
     @Column(nullable = false)
     protected Integer updatedUser;
 
+    @Builder.Default
     @Column(nullable = false)
-    protected Instant updatedAt;
+    protected Instant updatedAt = Instant.now();
 
     @Column(nullable = false)
     private ItemType type;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String itemText;
 
     @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
@@ -74,8 +75,17 @@ public class ListItem {
     @JoinColumn(name = "list_id")
     private TodoList todoList;
 
+    @Builder.Default
     @Column(nullable = false)
-    private Boolean complete;
+    private Boolean complete = Boolean.FALSE;
+
+    public ListItem(String title, ItemType type, String itemText, TodoList todoList, ListItem parent){
+        this.title = title;
+        this.type = type;
+        this.todoList = todoList;
+        this.itemText = itemText;
+        this.parent = parent;
+    }
 
     @PrePersist
     private void prePersist() {
