@@ -1,5 +1,21 @@
 import { createApp } from 'vue';
 import axios from 'axios';
+import { createRouter, createWebHashHistory, RouterLink } from 'vue-router';
+import TodoList from '@/components/TodoList.vue';
+
+const routes = [
+  {
+    path: '/:id',
+    name: 'todoList',
+    component: TodoList,
+    props: true
+  }
+];
+
+const router = createRouter({
+  history: createWebHashHistory(),
+  routes
+});
 
 createApp({
   data() {
@@ -14,7 +30,6 @@ createApp({
     }
   },
   mounted() {
-    console.log("HI! I'm starting.");
     axios.get('/api/todo-lists')
       .then(response => {
         console.log("Got response", response.data);
@@ -29,7 +44,8 @@ createApp({
     <ol>
       <li v-for="todoList in todoLists" :key="todoList.id">
         {{ todoList.title }}
+        <router-link :to="{ name: 'todoList', params: { id: todoList.id } }">View {{ todoList.title }}</router-link>
       </li>
     </ol>
   `
-}).mount('#app');
+}).use(router).mount('#app');
