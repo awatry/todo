@@ -16,7 +16,7 @@ docker compose build &&
 docker compose up -d &&
 while [ $DONE -eq 0 ]; do
   cd ~/Nextcloud/NextCloud/src/Todo/todo-ui
-  inotifywait -e modify,create -r --format \"%w%f\" src/
+  inotifywait -e modify,create -r --format \"%w%f\" src/ public/
   if [ $DONE -eq 0 ]; then
     cd ~/src/todo &&
     docker compose up -d --build
