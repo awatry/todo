@@ -41,13 +41,11 @@ createApp({
       });
   },
   template: `
-    <p><strong>Current route path:</strong> {{ $route.fullPath }}</p>
-    <ol>
-      <li v-for="todoList in todoLists" :key="todoList.id">
+    <p><strong>Current route path:</strong>{{ $route.fullPath }} <router-link :to="'/'">Go back</router-link></p>
+      <div v-for="todoList in todoLists" :key="todoList.id">
         {{ todoList.title }}
         <router-link :to="{ name: 'todoList', params: { id: todoList.id } }">View {{ todoList.title }}</router-link>
-      </li>
-    </ol>
+      </div>
     <main>
       <router-view />
     </main>
