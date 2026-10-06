@@ -1,3 +1,26 @@
 [tools]
-maven = "latest"
+maven = "3.10"
+java = "25"
 node = "24"
+
+[tasks.build]
+depends = [ "build-js", "build-java" ]
+
+[tasks.build-js]
+run = "npm run build"
+dir = "todo-ui"
+
+[tasks.build-java]
+run = "mvn package"
+dir = "todo"
+
+[tasks.test]
+depends = [ "test-js", "test-java" ]
+
+[tasks.test-js]
+run = "npm run test"
+dir = "todo-ui"
+
+[tasks.test-java]
+run = "mvn test"
+dir = "todo"
