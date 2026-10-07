@@ -4,23 +4,34 @@ java = "25"
 node = "24"
 
 [tasks.build]
-depends = [ "build-js", "build-java" ]
+depends = [ "build:js", "build:java" ]
 
-[tasks.build-js]
+[tasks."build:js"]
 run = "npm run build"
 dir = "todo-ui"
 
-[tasks.build-java]
+[tasks."build:java"]
 run = "mvn package"
 dir = "todo"
 
 [tasks.test]
-depends = [ "test-js", "test-java" ]
+depends = [ "test:js", "test:java" ]
 
-[tasks.test-js]
+[tasks."test:js"]
 run = "npm run test"
 dir = "todo-ui"
 
-[tasks.test-java]
+[tasks."test:java"]
 run = "mvn test"
 dir = "todo"
+
+[tasks."package:docker"]
+depends=["build:js", "package:java"]
+
+[tasks."package:java"]
+dir = "todo"
+run = "mvn package"
+
+[tasks.run]
+depends = ["package:docker"]
+run = "docker compose up"
