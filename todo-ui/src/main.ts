@@ -1,9 +1,17 @@
-import { createApp } from 'vue';
+import { createApp, defineComponent, type ComponentOptions } from 'vue';
 import axios from 'axios';
-import { createRouter, createWebHashHistory, RouterLink } from 'vue-router';
+import { createRouter, createWebHashHistory, type RouteRecordRaw } from 'vue-router';
 import TodoList from '@/components/TodoList.vue';
 
-const routes = [
+interface TodoListData {
+  todoLists: any[];
+}
+
+interface TodoListMethods {
+  updateData(data: any): void;
+}
+
+const routes: RouteRecordRaw[] = [
   {
     path: '/:id',
     name: 'todoList',
@@ -17,23 +25,23 @@ const router = createRouter({
   routes
 });
 
-createApp({
-  data() {
+createApp(defineComponent({
+  data(): TodoListData {
     return {
       todoLists: []
-    }
+    };
   },
   methods: {
-    updateData(data) {
+    updateData(data: any): void {
       console.log("New Data", data);
-      this.todoLists = data;
+      (this as any).todoLists = data;
     }
   },
   mounted() {
     axios.get('/api/todo-lists')
       .then(response => {
         console.log("Got response", response.data);
-        this.updateData(response.data?._embedded?.todoListList);
+        (this as any).updateData(response.data?._embedded?.todoListList);
         //window.todoLists = this.todoLists;
       })
       .catch(error => {
@@ -42,7 +50,7 @@ createApp({
   },
   template: `
     <p>
-      <strong>Current route path:</strong>{{ $route.fullPath }} <router-link :to="'/'">Go back</router-link>
+      <strong class="font-bold">Current route path:</strong> {{ $route.fullPath }} <router-link :to="'/'">Go back</router-link>
     </p>
     <div v-for="todoList in todoLists" :key="todoList.id">
       {{ todoList.title }}
@@ -52,4 +60,4 @@ createApp({
       <router-view />
     </main>
   `
-}).use(router).mount('#app');
+})).use(router).mount('#app');
