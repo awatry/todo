@@ -1,22 +1,26 @@
 package net.watrys.todo.controller;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.util.List;
 
-import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.validation.Valid;
+import net.watrys.todo.api.DefaultApi;
 import net.watrys.todo.assembler.TodoListAssembler;
+import net.watrys.todo.dto.TodoListCollectionItem;
 import net.watrys.todo.exception.TodoListNotFoundException;
 import net.watrys.todo.exception.TodoListSaveException;
 import net.watrys.todo.model.TodoList;
@@ -25,7 +29,7 @@ import net.watrys.todo.repository.TodoListRepository;
 
 @RestController
 @RequestMapping("/api/todo-lists")
-public class TodoListController {
+public class TodoListController implements DefaultApi {
 
     private final TodoListRepository repository;
 
@@ -36,35 +40,71 @@ public class TodoListController {
         this.assembler = assembler;
     }
 
-    @GetMapping
-    public CollectionModel<EntityModel<TodoList>> all() {
-        List<EntityModel<TodoList>> todoLists = repository.findAll().stream() //
-                .map(assembler::toModel) //
-                .toList();
-
-        return CollectionModel.of(todoLists, linkTo(methodOn(TodoListController.class).all()).withSelfRel());
-    }
-
+    @Override
     @PostMapping
-    public ResponseEntity<?> newList(@RequestBody TodoList todoList) {
+    public ResponseEntity<TodoListCollectionItem> createTodoList(@Valid net.watrys.todo.dto.TodoList createTodoListRequest) {
+        TodoList todoList = dtoToEntity(createTodoListRequest);
         EntityModel<TodoList> entityModel = assembler.toModel(repository.save(todoList));
-        return ResponseEntity.created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri()).body(entityModel);
+        TodoListCollectionItem dto = entityToCollectionItem(entityModel.getContent());
+
+        return ResponseEntity.created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri()).body(dto);
     }
 
+    @Override
+    @GetMapping
+    public ResponseEntity<List<TodoListCollectionItem>> getAllTodoLists() {
+        List<TodoListCollectionItem> todoLists = repository.findAll().stream() //
+                .map(this::entityToCollectionItem)
+                .map(this::addSelfLink)
+                .toList();
+        
+        return ResponseEntity.ok(todoLists);
+    }
+
+    @Override
     @GetMapping("/{id}")
-    public EntityModel<TodoList> one(@PathVariable Long id) {
+    public ResponseEntity<TodoListCollectionItem> getTodoListById(Long id) {
         TodoList todo = repository.findById(id).orElseThrow(() -> new TodoListNotFoundException(id));
-        return assembler.toModel(todo);
+        return ResponseEntity.ok(addSelfLink(entityToCollectionItem(todo)));
     }
 
+    @Override
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateList(@PathVariable Long id, @RequestBody TodoList todoList) {
-        TodoList todo = repository.findById(id).orElseThrow(() -> new TodoListNotFoundException(id));
-        if (todo.getId() != todoList.getId()) {
+    public ResponseEntity<TodoListCollectionItem> updateTodoListById(Long id,
+            @Valid net.watrys.todo.dto.TodoList dto) {
+        TodoList entity = repository.findById(id).orElseThrow(() -> new TodoListNotFoundException(id));
+        if (entity.getId() != dto.getId()) {
             throw new TodoListSaveException(id);
         }
 
-        EntityModel<TodoList> entityModel = assembler.toModel(repository.save(todoList));
-        return ResponseEntity.ok(entityModel);
+        TodoList dtoModel = dtoToEntity(dto);
+        TodoListCollectionItem saved = entityToCollectionItem(repository.save(dtoModel));
+        return ResponseEntity.ok(addSelfLink(saved));
+    }
+
+    private TodoListCollectionItem addSelfLink(TodoListCollectionItem saved){
+        EntityModel<TodoListCollectionItem> em = EntityModel.of(saved, linkTo(methodOn(TodoListController.class).getTodoListById(saved.getId())).withSelfRel());
+        saved.setSelf(em.getLink("self").get().toUri());
+        return saved;
+    }
+
+    private TodoList dtoToEntity(net.watrys.todo.dto.TodoList dto){
+        TodoList entity = new TodoList(dto.getTitle(), dto.getPosition());
+        entity.setId(dto.getId());
+        return entity;
+    }
+
+    private TodoListCollectionItem entityToCollectionItem(TodoList entity){
+        TodoListCollectionItem ci = new TodoListCollectionItem(entity.getTitle(), entity.getPosition());
+        ci.setId(entity.getId());
+        if (entity.getCreatedAt() != null) {
+            ci.setCreatedAt(OffsetDateTime.ofInstant(entity.getCreatedAt(), ZoneId.systemDefault()));
+        }
+        ci.setCreatedBy(entity.getCreatedUser());
+        ci.setUpdatedBy(entity.getUpdatedUser());
+        if (entity.getUpdatedAt() != null) {
+            ci.setUpdatedAt(OffsetDateTime.ofInstant(entity.getUpdatedAt(), ZoneId.systemDefault()));
+        }
+        return ci;
     }
 }

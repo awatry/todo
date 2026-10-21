@@ -12,9 +12,6 @@ public class RootController {
     @GetMapping
     RepresentationModel<?> index() {
         RepresentationModel<?> rootModel = new RepresentationModel<>();
-
-        // rootModel.add(linkTo(methodOn(TodoListController.class).all()).withRel("todo-lists"));
-
         return rootModel;
     }
 }

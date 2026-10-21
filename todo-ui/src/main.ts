@@ -41,7 +41,7 @@ createApp(defineComponent({
     axios.get('/api/todo-lists')
       .then(response => {
         console.log("Got response", response.data);
-        (this as any).updateData(response.data?._embedded?.todoListList);
+        (this as any).updateData(response.data);
         //window.todoLists = this.todoLists;
       })
       .catch(error => {
