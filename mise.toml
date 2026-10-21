@@ -27,6 +27,7 @@ dir = "todo"
 
 [tasks."package:docker"]
 depends=["build:js", "package:java"]
+run = "docker compose build"
 
 [tasks."package:java"]
 dir = "todo"
