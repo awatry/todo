@@ -1,24 +1,15 @@
 import { defineConfig } from 'vite';
-import vue from '@vitejs/plugin-vue';
 import react from '@vitejs/plugin-react';
 import { fileURLToPath, URL } from 'node:url';
 
 export default defineConfig({
   resolve: {
     alias: {
-      vue: 'vue/dist/vue.esm-bundler.js',
       '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
   },
   plugins: [
     react(),
-    vue({
-      template: {
-        compilerOptions: {
-          isCustomElement: (tag) => tag.startsWith('ion-') || tag.startsWith('def-'),
-        },
-      },
-    }),
   ],
   define: {
     'process.env.NODE_ENV': JSON.stringify('production'),
@@ -26,7 +17,7 @@ export default defineConfig({
   },
   build: {
     lib: {
-      entry: 'src/main.ts',
+      entry: 'src/main.tsx',
       name: 'TodoLists',
       fileName: (format) => `todo-lists.${format}.js`,
     },
