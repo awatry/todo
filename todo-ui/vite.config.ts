@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
+import react from '@vitejs/plugin-react';
 import { fileURLToPath, URL } from 'node:url';
 
 export default defineConfig({
@@ -10,6 +11,7 @@ export default defineConfig({
     },
   },
   plugins: [
+    react(),
     vue({
       template: {
         compilerOptions: {
