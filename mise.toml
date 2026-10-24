@@ -33,6 +33,6 @@ run = "docker compose build"
 dir = "todo"
 run = "mvn package"
 
-[tasks.run]
+[tasks.up]
 depends = ["package:docker"]
 run = "docker compose up"
