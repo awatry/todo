@@ -43,13 +43,13 @@ public class TodoList {
     private List<ListItem> topLevelItems;
 
     @Column(nullable = false, updatable = false)
-    protected Integer createdUser;
+    protected Integer createdBy;
 
     @Column(nullable = false, updatable = false)
     protected Instant createdAt;
 
     @Column(nullable = false)
-    protected Integer updatedUser;
+    protected Integer updatedBy;
 
     @Column(nullable = false)
     protected Instant updatedAt;
@@ -62,13 +62,13 @@ public class TodoList {
     @PrePersist
     private void prePersist() {
         preUpdate();
-        this.createdUser = 1;
+        this.createdBy = 1;
         this.createdAt = Instant.now();
     }
 
     @PreUpdate
     private void preUpdate() {
-        this.updatedUser = 1;
+        this.updatedBy = 1;
         this.updatedAt = Instant.now();
     }
 

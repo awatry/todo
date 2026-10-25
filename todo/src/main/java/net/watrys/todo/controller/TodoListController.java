@@ -1,6 +1,5 @@
 package net.watrys.todo.controller;
 
-
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
@@ -42,7 +41,8 @@ public class TodoListController implements DefaultApi {
 
     @Override
     @PostMapping
-    public ResponseEntity<TodoListCollectionItem> createTodoList(@Valid net.watrys.todo.dto.TodoList createTodoListRequest) {
+    public ResponseEntity<TodoListCollectionItem> createTodoList(
+            @Valid net.watrys.todo.dto.TodoList createTodoListRequest) {
         TodoList todoList = dtoToEntity(createTodoListRequest);
         EntityModel<TodoList> entityModel = assembler.toModel(repository.save(todoList));
         TodoListCollectionItem dto = entityToCollectionItem(entityModel.getContent());
@@ -57,7 +57,7 @@ public class TodoListController implements DefaultApi {
                 .map(this::entityToCollectionItem)
                 .map(this::addSelfLink)
                 .toList();
-        
+
         return ResponseEntity.ok(todoLists);
     }
 
@@ -82,26 +82,27 @@ public class TodoListController implements DefaultApi {
         return ResponseEntity.ok(addSelfLink(saved));
     }
 
-    private TodoListCollectionItem addSelfLink(TodoListCollectionItem saved){
-        EntityModel<TodoListCollectionItem> em = EntityModel.of(saved, linkTo(methodOn(TodoListController.class).getTodoListById(saved.getId())).withSelfRel());
+    private TodoListCollectionItem addSelfLink(TodoListCollectionItem saved) {
+        EntityModel<TodoListCollectionItem> em = EntityModel.of(saved,
+                linkTo(methodOn(TodoListController.class).getTodoListById(saved.getId())).withSelfRel());
         saved.setSelf(em.getLink("self").get().toUri());
         return saved;
     }
 
-    private TodoList dtoToEntity(net.watrys.todo.dto.TodoList dto){
+    private TodoList dtoToEntity(net.watrys.todo.dto.TodoList dto) {
         TodoList entity = new TodoList(dto.getTitle(), dto.getPosition());
         entity.setId(dto.getId());
         return entity;
     }
 
-    private TodoListCollectionItem entityToCollectionItem(TodoList entity){
+    private TodoListCollectionItem entityToCollectionItem(TodoList entity) {
         TodoListCollectionItem ci = new TodoListCollectionItem(entity.getTitle(), entity.getPosition());
         ci.setId(entity.getId());
         if (entity.getCreatedAt() != null) {
             ci.setCreatedAt(OffsetDateTime.ofInstant(entity.getCreatedAt(), ZoneId.systemDefault()));
         }
-        ci.setCreatedBy(entity.getCreatedUser());
-        ci.setUpdatedBy(entity.getUpdatedUser());
+        ci.setCreatedBy(entity.getCreatedBy());
+        ci.setUpdatedBy(entity.getUpdatedBy());
         if (entity.getUpdatedAt() != null) {
             ci.setUpdatedAt(OffsetDateTime.ofInstant(entity.getUpdatedAt(), ZoneId.systemDefault()));
         }
