@@ -3,7 +3,7 @@
 ## Architecture Overview
 This project is a full-stack Todo list application consisting of a frontend, a backend, and an infrastructure layer.
 
-- **Frontend**: A Single Page Application (SPA) built with **Vue.js 3** and **Vite**. It handles the user interface and interacts with the backend API via **Axios**.
+- **Frontend**: A Single Page Application (SPA) built with **React 19** and **Vite**. It handles the user interface and interacts with the backend API via **Axios**.
 - **Backend**: A **Java Spring Boot** application that provides the RESTful API. It uses **Spring Data JPA** for persistence and **Spring HATEOAS** for hypermedia-driven API design.
 - **Database**: 
     - **PostgreSQL** is used as the primary relational database.
@@ -13,7 +13,7 @@ This project is a full-stack Todo list application consisting of a frontend, a b
     - **Docker & Docker Compose** are used to containerize and orchestrate the entire stack (PostgreSQL, Backend, Nginx).
 
 ## Technology Stack
-- **Frontend**: Vue.js, Vite, Axios, Vue Router.
+- **Frontend**: React, Vite, Axios, React Router.
 - **Backend**: Java 25, Spring Boot 4.1.1, Maven, JPA, Hibernate, Lombok.
 - **Database**: PostgreSQL, H2.
 - **DevOps**: Docker, Docker Compose, Nginx.
