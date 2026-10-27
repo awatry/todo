@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { fileURLToPath, URL } from 'node:url';
+import { resolve } from 'path';
 
 export default defineConfig({
   resolve: {
@@ -16,9 +17,15 @@ export default defineConfig({
     'process.env': {},
   },
   build: {
+    rollupOptions: {
+      input: {
+        main: resolve(import.meta.dirname, 'index.html'), // or 'production.html'
+      },
+    },
     lib: {
       entry: 'src/main.tsx',
       name: 'TodoLists',
+      formats: ['es'],
       fileName: (format) => `todo-lists.${format}.js`,
     },
   },

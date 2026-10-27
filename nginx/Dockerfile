@@ -11,8 +11,8 @@ FROM nginx:latest
 RUN rm -rf /usr/share/nginx/html/*
 RUN rm /etc/nginx/conf.d/default.conf
 
-COPY --from=builder /app/todo-ui/index.html /usr/share/nginx/html/
-COPY --from=builder /app/todo-ui/dist /usr/share/nginx/html/dist
+#COPY --from=builder /app/todo-ui/dist/index.html /usr/share/nginx/html/
+COPY --from=builder /app/todo-ui/dist /usr/share/nginx/html
 
 # Copy configuration file into the container
 COPY nginx/nginx.conf /etc/nginx/conf.d/default.conf
