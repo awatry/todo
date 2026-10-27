@@ -12,7 +12,7 @@ Vite dev-server proxy.
 ```
 todo-ui/
 ├── AGENTS.md
-├── index.html            # Entry page (loads /src/main.tsx, vite converts to /todo-lists.es.js)
+├── index.html            # Entry page (loads /src/main.tsx in dev mode, vite converts to compiled js)
 ├── package.json
 ├── tsconfig.json         # App TS config (ESNext, bundler, jsx: react-jsx)
 ├── tsconfig.node.json    # Vite config TS config (ES2020, bundler)
