@@ -195,4 +195,4 @@ it rather than the other way around.
 - **CSS is extracted** to `dist/todo-lists.css` in the library build; in dev
   mode styles are injected by Vite.
 - The project is part of a monorepo; sibling services live in `../todo/`
-  (Go backend) and the top-level `../AGENTS.md` has the big picture.
+  (Java Spring Boot backend) and the top-level `../AGENTS.md` has the big picture.
