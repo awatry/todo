@@ -1,9 +1,9 @@
 # AGENTS.md — todo-ui
 
 `todo-ui` is the React single-page application for the todo project. It is
-built as a **library** (UMD/ES bundles in `dist/`) that the `todo` backend
-serves at `/ui/index.html`, and it talks to that backend's REST API through a
-Vite dev-server proxy.
+built as a **single-page app** (ES bundle in `dist/`) that an `nginx` backend
+serves at `/index.html`. It talks to the backend's REST API through a
+Vite dev-server proxy for dev deploys, or through an nginx proxy_set directive.
 
 ## Architecture
 
@@ -12,7 +12,7 @@ Vite dev-server proxy.
 ```
 todo-ui/
 ├── AGENTS.md
-├── index.html            # Entry page (loads /src/main.tsx in dev mode, vite converts to compiled js)
+├── index.html            # Entry page (loads /src/main.tsx in dev mode, vite converts to compiled modular js)
 ├── package.json
 ├── tsconfig.json         # App TS config (ESNext, bundler, jsx: react-jsx)
 ├── tsconfig.node.json    # Vite config TS config (ES2020, bundler)

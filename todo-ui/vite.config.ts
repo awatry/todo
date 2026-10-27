@@ -20,7 +20,10 @@ export default defineConfig({
       },
       external: [],
       output: {
-        globals: {}
+        globals: {},
+        // Emit modular ES JavaScript as .mjs files (non-JS assets keep their extension)
+        entryFileNames: 'assets/[name]-[hash].mjs',
+        chunkFileNames: 'assets/[name]-[hash].mjs',
       }
     },
   },
