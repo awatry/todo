@@ -21,12 +21,10 @@ export default defineConfig({
       input: {
         main: resolve(import.meta.dirname, 'index.html'), // or 'production.html'
       },
-    },
-    lib: {
-      entry: 'src/main.tsx',
-      name: 'TodoLists',
-      formats: ['es'],
-      fileName: (format) => `todo-lists.${format}.js`,
+      external: [],
+      output: {
+        globals: {}
+      }
     },
   },
   server: {
