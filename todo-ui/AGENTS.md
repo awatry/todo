@@ -74,10 +74,12 @@ The UI is a thin client for the `todo` backend:
 # Install dependencies (from the todo-ui/ directory)
 npm install
 
-# Type-check (optional; tsc is not run by the build script)
-npx tsc --noEmit
+# Type-check only (runs `tsc --noEmit`; also run automatically by the build)
+npm run type-check
 
 # Production build -> dist/ (UMD + ES bundles + CSS)
+# `build` is `npm run type-check && vite build` — type errors fail the build
+# before bundling.
 npm run build
 ```
 
@@ -144,15 +146,36 @@ The test suite currently contains a single placeholder test in
 
 | Package | Version | Purpose |
 |---|---|---|
-| `vite` | ^8.3.4 | Dev server + library bundler |
-| `@vitejs/plugin-react` | ^6.1.2 | React support (Fast Refresh) in Vite |
-| `typescript` | ^5.4.0 | Type checking / JSX |
-| `vitest` | ^5.0.3 | Unit test runner |
-| `@vitest/ui` | ^5.0.3 | Interactive test UI |
-| `jsdom` | ^30.1.2 | DOM environment for tests |
 | `@types/react` | ^19.3.0 | React type definitions |
 | `@types/react-dom` | ^19.3.0 | ReactDOM type definitions |
 | `@types/node` | ^24.19.2 | Node type definitions (Vite config) |
+| `@vitejs/plugin-react` | ^6.1.2 | React support (Fast Refresh) in Vite |
+| `@vitest/ui` | ^5.0.3 | Interactive test UI |
+| `vite` | ^8.3.4 | Dev server + library bundler |
+| `vitest` | ^5.0.3 | Unit test runner |
+| `typescript` | ^5.4.0 | Type checking / JSX |
+| `jsdom` | ^30.1.2 | DOM environment for tests |
+
+## Keeping this file up to date
+
+AGENTS.md is a living document: keep it in sync with the codebase and update
+it in the same change as the code it describes. In particular, any of the
+following must trigger an update to this file:
+
+- **Components** — adding, removing, or renaming a component or other file
+  under `src/` (e.g., `components/TodoList.tsx`, `__tests__/`): update the
+  directory layout tree, the "Frontend application (`src/`)" section, and
+  any other place that references it (build entry, agent tips, ...).
+- **Dependencies** — adding, removing, or changing the version of a package
+  (runtime or dev, especially major-version bumps): update the tables under
+  "Dependencies" and the "Build tools" list when the tooling itself changes.
+- **Architecture** — changes to the build setup (library mode, entry,
+  outputs, externals, `package.json` scripts), routing, the API base path or
+  dev-proxy target, or the test tooling: update the affected "Architecture",
+  "Build tools", and "How to ..." sections.
+
+When in doubt, the codebase is the source of truth — fix this file to match
+it rather than the other way around.
 
 ## Useful agent tips
 
@@ -166,8 +189,9 @@ The test suite currently contains a single placeholder test in
   `http://localhost:3000/#/` to avoid server-side route configuration.
 - **API base path is `/api`** — do not hard-code hostnames; the dev proxy and
   production nginx handle the target.
-- **`npm run build` does not run `tsc`** — type errors only surface via
-  `npx tsc --noEmit` or the editor. Run it before committing.
+- **`npm run build` runs `tsc` first** — the `build` script is
+  `npm run type-check && vite build`, so type errors fail the build; run
+  `npm run type-check` on its own for fast feedback while editing.
 - **CSS is extracted** to `dist/todo-lists.css` in the library build; in dev
   mode styles are injected by Vite.
 - The project is part of a monorepo; sibling services live in `../todo/`

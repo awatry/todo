@@ -6,9 +6,10 @@
   "scripts": {
     "start": "vite",
     "dev": "vite",
-    "build": "vite build",
+    "build": "npm run type-check && vite build",
     "test": "vitest run",
-    "watchTests": "vitest"
+    "watchTests": "vitest",
+    "type-check": "tsc --noEmit"
   },
   "devDependencies": {
     "@types/node": "^24.19.2",
