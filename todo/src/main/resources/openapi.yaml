@@ -28,6 +28,12 @@ components:
           type: integer
           description: Sort order for the todo list
           example: 1
+        topLevelItems:
+          type: array
+          description: Top-level list items belonging to this todo list (read-only)
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/ListItem'
         createdAt:
           type: string
           format: date-time
@@ -55,6 +61,70 @@ components:
               type: string
               format: uri
               description: Link to the todo list resource
+
+    ListItem:
+      type: object
+      required:
+        - title
+        - position
+        - type
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Auto-generated primary key (not included in responses)
+        title:
+          type: string
+          description: Title of the list item
+          example: "My Section"
+        position:
+          type: integer
+          description: Sort order for the list item
+          example: 1
+        type:
+          type: string
+          enum:
+            - SECTION
+            - LIST_ITEM
+          description: Type of the list item
+          example: "LIST_ITEM"
+        itemText:
+          type: string
+          description: Text content of the list item (only for LIST_ITEM type)
+          example: "Buy groceries"
+        subItems:
+          type: array
+          description: Child list items nested under this item (recursive) (read-only)
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/ListItem'
+        complete:
+          type: boolean
+          description: Completion status of the list item
+          default: false
+          example: false
+        parentId:
+          type: integer
+          description: ID of the parent list item (null for top-level items)
+        todoListId:
+          type: integer
+          description: ID of the todo list this item belongs to
+        createdAt:
+          type: string
+          format: date-time
+          description: Creation timestamp (read-only)
+          example: "2025-10-16T10:30:00Z"
+        updatedAt:
+          type: string
+          format: date-time
+          description: Last update timestamp (read-only)
+          example: "2025-10-16T10:45:00Z"
+        createdBy:
+          type: integer
+          description: ID of the user who created this list item (read-only)
+        updatedBy:
+          type: integer
+          description: ID of the user who last updated this list item (read-only)
 
 paths:
   /api/todo-lists:

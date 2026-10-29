@@ -3,6 +3,8 @@ package net.watrys.todo.model;
 import java.time.Instant;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -45,17 +47,16 @@ public class ListItem {
     protected Integer position;
 
     @Column(nullable = false, updatable = false)
-    protected Integer createdUser;
+    protected Integer createdBy;
 
     @Column(nullable = false, updatable = false)
     protected Instant createdAt;
 
     @Column(nullable = false)
-    protected Integer updatedUser;
+    protected Integer updatedBy;
 
-    @Builder.Default
     @Column(nullable = false)
-    protected Instant updatedAt = Instant.now();
+    protected Instant updatedAt;
 
     @Column(nullable = false)
     private ItemType type;
@@ -67,36 +68,44 @@ public class ListItem {
     @OrderBy("complete DESC, position ASC")
     private List<ListItem> subItems;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parent_id")
+    @JoinColumn(name = "parent_id", nullable = true, updatable = false, insertable = false, referencedColumnName = "id")
+    @ManyToOne(targetEntity = ListItem.class)
+    @JsonIgnore
     private ListItem parent;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "list_id")
+    @Column(name="parent_id", insertable=true, updatable = true)
+    private Integer parentId;
+
+    @JoinColumn(name = "list_id", nullable = false, updatable = false, insertable = false, referencedColumnName = "id")
+    @ManyToOne(targetEntity = TodoList.class)
+    @JsonIgnore
     private TodoList todoList;
+
+    @Column(name = "list_id", nullable=false, insertable=true, updatable=true)
+    private Integer todoListId;
 
     @Builder.Default
     @Column(nullable = false)
     private Boolean complete = Boolean.FALSE;
 
-    public ListItem(String title, ItemType type, String itemText, TodoList todoList, ListItem parent){
+    public ListItem(String title, ItemType type, String itemText, Integer todoListId, Integer parentId){
         this.title = title;
         this.type = type;
-        this.todoList = todoList;
+        this.todoListId = todoListId;
         this.itemText = itemText;
-        this.parent = parent;
+        this.parentId = parentId;
     }
 
     @PrePersist
     private void prePersist() {
         preUpdate();
-        this.createdUser = 1;
+        this.createdBy = 1;
         this.createdAt = Instant.now();
     }
 
     @PreUpdate
     private void preUpdate() {
-        this.updatedUser = 1;
+        this.updatedBy = 1;
         this.updatedAt = Instant.now();
     }
 }
