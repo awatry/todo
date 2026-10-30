@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
-import net.watrys.todo.api.DefaultApi;
+import net.watrys.todo.api.TodoListApi;
 import net.watrys.todo.assembler.TodoListAssembler;
 import net.watrys.todo.dto.TodoListCollectionItem;
 import net.watrys.todo.exception.TodoListNotFoundException;
@@ -28,7 +28,7 @@ import net.watrys.todo.repository.TodoListRepository;
 
 @RestController
 @RequestMapping("/api/todo-lists")
-public class TodoListController implements DefaultApi {
+public class TodoListController implements TodoListApi {
 
     private final TodoListRepository repository;
 

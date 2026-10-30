@@ -126,10 +126,23 @@ components:
           type: integer
           description: ID of the user who last updated this list item (read-only)
 
+    ListItemCollectionItem:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/ListItem'
+        - type: object
+          properties:
+            self:
+              type: string
+              format: uri
+              description: Link to the todo list item resource
+
 paths:
   /api/todo-lists:
     get:
       summary: List all todo lists
+      tags:
+        - "TodoList"
       operationId: getAllTodoLists
       responses:
         '200':
@@ -142,6 +155,8 @@ paths:
                   $ref: '#/components/schemas/TodoListCollectionItem'
     post:
       summary: Create a new todo list
+      tags:
+        - "TodoList"
       operationId: createTodoList
       requestBody:
         required: true
@@ -163,6 +178,8 @@ paths:
   /api/todo-lists/{id}:
     get:
       summary: Get a todo list by ID
+      tags:
+        - "TodoList"
       operationId: getTodoListById
       parameters:
         - name: id
@@ -185,6 +202,8 @@ paths:
 
     put:
       summary: Update an existing todo list
+      tags:
+        - "TodoList"
       operationId: updateTodoListById
       parameters:
         - name: id
@@ -212,3 +231,49 @@ paths:
           description: Todo list not found
         '422':
           description: Invalid request (e.g., ID mismatch)
+
+
+  /api/list-items:
+    get:
+      summary: List all items for a todo list
+      tags:
+        - "ListItem"
+      parameters:
+        - name: listId
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: The unique identifier of the todo list to load items for
+      operationId: getListItemsForList
+      responses:
+        '200':
+          description: A collection of todo list items with self-referential links (HATEOAS)
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ListItemCollectionItem'
+    post:
+      summary: Create a new todo list item
+      tags:
+        - "ListItem"
+      operationId: createListItem
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ListItem'
+      responses:
+        '201':
+          description: Todo list item created successfully. Response includes self link.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ListItemCollectionItem'
+        '400':
+          description: Invalid request body
