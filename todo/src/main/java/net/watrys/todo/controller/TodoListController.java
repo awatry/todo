@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.validation.Valid;
 import net.watrys.todo.api.TodoListApi;
 import net.watrys.todo.assembler.TodoListAssembler;
+import net.watrys.todo.dto.ListItem;
 import net.watrys.todo.dto.TodoListCollectionItem;
 import net.watrys.todo.exception.TodoListNotFoundException;
 import net.watrys.todo.exception.TodoListSaveException;
@@ -98,6 +99,19 @@ public class TodoListController implements TodoListApi {
     private TodoListCollectionItem entityToCollectionItem(TodoList entity) {
         TodoListCollectionItem ci = new TodoListCollectionItem(entity.getTitle(), entity.getPosition());
         ci.setId(entity.getId());
+
+        List<ListItem> topLevelItems = entity.getTopLevelItems().stream().map(
+            ei -> {
+                ListItem li = new ListItem(ei.getTitle(), ei.getPosition(), entityTypeToDtoType(ei.getType()));
+                li.setComplete(ei.getComplete());
+                li.setId(ei.getId());
+                li.setItemText(ei.getItemText());
+                return li;
+            }
+        ).toList();
+        ci.setTopLevelItems(topLevelItems);
+
+
         if (entity.getCreatedAt() != null) {
             ci.setCreatedAt(OffsetDateTime.ofInstant(entity.getCreatedAt(), ZoneId.systemDefault()));
         }
@@ -107,5 +121,19 @@ public class TodoListController implements TodoListApi {
             ci.setUpdatedAt(OffsetDateTime.ofInstant(entity.getUpdatedAt(), ZoneId.systemDefault()));
         }
         return ci;
+    }
+
+    static ListItem.TypeEnum entityTypeToDtoType(net.watrys.todo.model.ListItem.ItemType entityType) {
+        if (entityType == null) {
+            return null;
+        }
+        switch (entityType) {
+            case LIST_ITEM:
+                return ListItem.TypeEnum.LIST_ITEM;
+            case SECTION:
+                return ListItem.TypeEnum.SECTION;
+            default:
+                throw new IllegalArgumentException("Unknown enum type");
+        }
     }
 }
