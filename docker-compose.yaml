@@ -1,8 +1,8 @@
 services:
   postgresql:
     image: postgres:18-alpine
-    # expose:
-    #   - 5432
+    expose:
+      - 5432
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=password
@@ -17,11 +17,14 @@ services:
 
   todo-app:
     build: todo
+    ports:
+      - "8787:8787"
     environment:
       - SPRING_PROFILES_ACTIVE=dev
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgresql:5432/todo
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=password
+      - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:8787
     depends_on:
       - postgresql
 
