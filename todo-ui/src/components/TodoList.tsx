@@ -8,8 +8,8 @@ export interface TodoItem {
   id: string;
   type: 'SECTION' | 'TODO';
   title: string;
-  complete: boolean; /* Relevant for TODO items */
-  itemText: string; /* Relevant for TODO items */
+  complete: boolean /* Relevant for TODO items */;
+  itemText: string /* Relevant for TODO items */;
 }
 
 /** Represents the entire todo list structure. */
