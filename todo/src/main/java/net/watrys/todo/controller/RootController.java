@@ -1,6 +1,6 @@
 package net.watrys.todo.controller;
 
-//import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
+// import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.web.bind.annotation.GetMapping;

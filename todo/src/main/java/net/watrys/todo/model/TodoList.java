@@ -11,14 +11,13 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OrderBy;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
+import java.time.Instant;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.time.Instant;
-import java.util.List;
 
 @Entity
 @Getter
@@ -71,5 +70,4 @@ public class TodoList {
         this.updatedBy = 1;
         this.updatedAt = Instant.now();
     }
-
 }

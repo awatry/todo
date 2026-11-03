@@ -1,9 +1,15 @@
 package net.watrys.todo.controller;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.util.List;
-
+import net.watrys.todo.api.ListItemApi;
+import net.watrys.todo.assembler.ListItemAssembler;
+import net.watrys.todo.dto.ListItem;
+import net.watrys.todo.dto.ListItemCollectionItem;
+import net.watrys.todo.repository.ListItemRepository;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.http.ResponseEntity;
@@ -11,14 +17,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
-import net.watrys.todo.api.ListItemApi;
-import net.watrys.todo.assembler.ListItemAssembler;
-import net.watrys.todo.dto.ListItem;
-import net.watrys.todo.dto.ListItemCollectionItem;
-import net.watrys.todo.repository.ListItemRepository;
 
 @RestController
 @RequestMapping("/api/list-items")
@@ -40,7 +38,9 @@ public class ListItemController implements ListItemApi {
         EntityModel<net.watrys.todo.model.ListItem> entityModel = assembler.toModel(repository.save(todoList));
         ListItemCollectionItem dto = entityToCollectionItem(entityModel.getContent());
 
-        return ResponseEntity.created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri()).body(dto);
+        return ResponseEntity.created(
+                        entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
+                .body(dto);
     }
 
     @Override

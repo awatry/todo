@@ -100,6 +100,14 @@
                 </configuration>
                 <executions>
                     <execution>
+                        <id>spotless-format</id>
+                        <!-- Binds to process-sources so it runs automatically during compilation -->
+                        <phase>process-sources</phase>
+                        <goals>
+                            <goal>apply</goal>
+                        </goals>
+                    </execution>
+                    <execution>
                         <goals>
                             <!-- Automatically checks formatting during the compile phase -->
                             <goal>check</goal>

@@ -1,10 +1,6 @@
 package net.watrys.todo.model;
 
-import java.time.Instant;
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -18,6 +14,8 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OrderBy;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
+import java.time.Instant;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -33,7 +31,8 @@ import lombok.Setter;
 public class ListItem {
 
     public enum ItemType {
-        SECTION, LIST_ITEM
+        SECTION,
+        LIST_ITEM
     }
 
     @Id
@@ -73,7 +72,7 @@ public class ListItem {
     @JsonIgnore
     private ListItem parent;
 
-    @Column(name="parent_id", insertable=true, updatable = true)
+    @Column(name = "parent_id", insertable = true, updatable = true)
     private Integer parentId;
 
     @JoinColumn(name = "list_id", nullable = false, updatable = false, insertable = false, referencedColumnName = "id")
@@ -81,14 +80,14 @@ public class ListItem {
     @JsonIgnore
     private TodoList todoList;
 
-    @Column(name = "list_id", nullable=false, insertable=true, updatable=true)
+    @Column(name = "list_id", nullable = false, insertable = true, updatable = true)
     private Integer todoListId;
 
     @Builder.Default
     @Column(nullable = false)
     private Boolean complete = Boolean.FALSE;
 
-    public ListItem(String title, ItemType type, String itemText, Integer todoListId, Integer parentId){
+    public ListItem(String title, ItemType type, String itemText, Integer todoListId, Integer parentId) {
         this.title = title;
         this.type = type;
         this.todoListId = todoListId;
