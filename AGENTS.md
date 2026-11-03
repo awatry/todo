@@ -63,6 +63,15 @@ To maintain high code quality, please adhere to the following principles:
 - **Consistency**: Follow the existing patterns and naming conventions found in the current codebase.
 - **Testability**: Ensure new features include corresponding unit or integration tests where applicable.
 
+## Code Formatting
+- **Java (Palantir style)**: Java sources in the `todo/` backend project must follow the **Palantir Java Format** style. This is
+  enforced by the **Spotless** Maven plugin configured in `todo/pom.xml`:
+    - `spotless:apply` runs automatically during the `process-sources` phase, reformatting sources on every build.
+    - `spotless:check` runs during the `compile` phase and fails the build if any source file is not formatted correctly.
+  The Spotless configuration also removes unused imports and enforces a canonical import order.
+- Run `mvn spotless:apply` in `todo/` to format sources before committing, and ensure all new or modified Java files
+  comply with the Palantir style.
+
 
 ## Maintenance
 - Keep this file up to date if major library or architectural changes are made to the project.
