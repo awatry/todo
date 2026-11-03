@@ -71,6 +71,8 @@ The UI is a thin client for the `todo` backend:
 - **TypeScript 5** — type definitions and JSX (`jsx: react-jsx`)
 - **Vitest 5** — unit test runner (jsdom environment)
 - **jsdom 30** — DOM simulation for tests
+- **oxfmt** — source auto-formatting (`npm run format` / `format:check`)
+- **oxlint** — source linting (`npm run lint` / `lint:fix`)
 
 ## How to build
 
@@ -82,8 +84,8 @@ npm install
 npm run type-check
 
 # Production build -> dist/ (UMD + ES bundles + CSS)
-# `build` is `npm run type-check && vite build` — type errors fail the build
-# before bundling.
+# `build` is `npm run type-check && npm run format && vite build` — type
+# errors fail the build, and the sources are auto-formatted before bundling.
 npm run build
 ```
 
@@ -106,6 +108,35 @@ npm run dev        # or: npm start
 - Serves `index.html` and loads `src/main.tsx` as an ES module
 - Proxies `/api/*` requests to `http://localhost:8080` (the `todo` backend)
 
+## Linting and formatting
+
+UI sources are **linted with `oxlint`** and **formatted with `oxfmt`**
+(Oxidation Compiler tooling). Both target the whole project (the scripts run
+against `.`) and are wired into the `package.json` scripts:
+
+| Script         | Command           | Purpose                                                                     |
+| -------------- | ----------------- | --------------------------------------------------------------------------- |
+| `format`       | `oxfmt --write .` | **Auto-format** the project's sources in place                              |
+| `format:check` | `oxfmt --check .` | Check formatting only (CI style); exits non-zero if anything is unformatted |
+| `lint`         | `oxlint`          | Lint the project's sources; exits non-zero on errors                        |
+| `lint:fix`     | `oxlint --fix`    | Auto-fix lint issues where possible                                         |
+
+**Requirements:**
+
+- After **adding or modifying any code under `src/`**, run `npm run format`
+  to format it (use `npm run lint:fix` as well when lint reports issues).
+  Never commit hand-formatted code that `oxfmt` would change.
+- **Any code change to the UI project must be validated** by running:
+
+  ```bash
+  npm run format:check   # formatting must pass
+  npm run lint           # lint must pass
+  ```
+
+  **Alternative:** the `test` script (`npm test`) runs
+  `npm run format:check && npm run lint && vitest run`, so a single
+  `npm test` run validates formatting, linting, **and** the unit tests.
+
 ## How to run unit tests
 
 Tests are run with **Vitest** (config in `vitest.config.ts`):
@@ -115,10 +146,12 @@ Tests are run with **Vitest** (config in `vitest.config.ts`):
 - Test files: `src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,tsx}`
 
 ```bash
-# Single run (CI style) -> reports and exits
+# Single run (CI style): `npm test` runs `npm run format:check && npm run
+# lint && vitest run` — i.e. it validates formatting and linting in
+# addition to running the unit tests and exiting
 npm test
 
-# Watch mode during development
+# Watch mode during development (runs only the unit tests)
 npm run watchTests
 
 # Run a single test file
@@ -148,17 +181,19 @@ The test suite currently contains a single placeholder test in
 
 ### Development
 
-| Package                | Version  | Purpose                              |
-| ---------------------- | -------- | ------------------------------------ |
-| `@types/react`         | ^19.3.0  | React type definitions               |
-| `@types/react-dom`     | ^19.3.0  | ReactDOM type definitions            |
-| `@types/node`          | ^24.19.2 | Node type definitions (Vite config)  |
-| `@vitejs/plugin-react` | ^6.1.2   | React support (Fast Refresh) in Vite |
-| `@vitest/ui`           | ^5.0.3   | Interactive test UI                  |
-| `vite`                 | ^8.3.4   | Dev server + SPA bundler             |
-| `vitest`               | ^5.0.3   | Unit test runner                     |
-| `typescript`           | ^5.4.0   | Type checking / JSX                  |
-| `jsdom`                | ^30.1.2  | DOM environment for tests            |
+| Package                | Version  | Purpose                                   |
+| ---------------------- | -------- | ----------------------------------------- |
+| `@types/react`         | ^19.3.0  | React type definitions                    |
+| `@types/react-dom`     | ^19.3.0  | ReactDOM type definitions                 |
+| `@types/node`          | ^24.19.2 | Node type definitions (Vite config)       |
+| `@vitejs/plugin-react` | ^6.1.2   | React support (Fast Refresh) in Vite      |
+| `@vitest/ui`           | ^5.1.0   | Interactive test UI                       |
+| `vite`                 | ^8.3.4   | Dev server + SPA bundler                  |
+| `vitest`               | ^5.1.0   | Unit test runner                          |
+| `typescript`           | ^5.4.0   | Type checking / JSX                       |
+| `jsdom`                | ^30.1.2  | DOM environment for tests                 |
+| `oxfmt`                | ^0.75.0  | Source auto-formatting (`format` scripts) |
+| `oxlint`               | ^1.90.0  | Source linting (`lint` scripts)           |
 
 ## Keeping this file up to date
 
@@ -175,8 +210,10 @@ following must trigger an update to this file:
   "Dependencies" and the "Build tools" list when the tooling itself changes.
 - **Architecture** — changes to the build setup (SPA mode, entry,
   outputs, externals, `package.json` scripts), routing, the API base path or
-  dev-proxy target, or the test tooling: update the affected "Architecture",
-  "Build tools", and "How to ..." sections.
+  dev-proxy target, the lint/format tooling (`oxlint` / `oxfmt` and the
+  `lint`, `lint:fix`, `format`, `format:check` scripts), or the test tooling:
+  update the affected "Architecture", "Build tools", and "How to ..."
+  sections (including "Linting and formatting").
 
 When in doubt, the codebase is the source of truth — fix this file to match
 it rather than the other way around.
@@ -193,8 +230,14 @@ it rather than the other way around.
   `http://localhost:3000/#/` to avoid server-side route configuration.
 - **API base path is `/api`** — do not hard-code hostnames; the dev proxy and
   production nginx handle the target.
-- **`npm run build` runs `tsc` first** — the `build` script is
-  `npm run type-check && vite build`, so type errors fail the build; run
+- **Format and lint every change** — after adding/modifying code under
+  `src/`, run `npm run format` to format it and `npm run lint:fix` to fix
+  lint issues; validate the change with `npm run format:check` and
+  `npm run lint` (or just `npm test`, which runs
+  `npm run format:check && npm run lint && vitest run`).
+- **`npm run build` runs `tsc` and formatting first** — the `build` script
+  is `npm run type-check && npm run format && vite build`, so type errors
+  fail the build and the sources are auto-formatted before bundling; run
   `npm run type-check` on its own for fast feedback while editing.
 - **CSS is extracted** to `dist/todo-lists.css` in the SPA build; in dev
   mode styles are injected by Vite.
