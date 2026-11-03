@@ -17,7 +17,6 @@ function Home() {
     axios
       .get('/api/todo-lists')
       .then((response) => {
-        console.log('Got response', response.data);
         setTodoLists(response.data);
       })
       .catch((error) => {
@@ -33,8 +32,7 @@ function Home() {
       </p>
       {todoLists.map((todoList) => (
         <div key={todoList.id}>
-          {todoList.title}{' '}
-          <Link to={`/todo/${todoList.id}`}>View {todoList.title}</Link>
+          {todoList.title} <Link to={`/todo/${todoList.id}`}>View {todoList.title}</Link>
         </div>
       ))}
     </div>

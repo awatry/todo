@@ -46,7 +46,6 @@ const TodoList = (props: TodoListProps) => {
           }
         });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.id]);
 
   // --- Methods ---

@@ -139,26 +139,26 @@ The test suite currently contains a single placeholder test in
 
 ### Runtime
 
-| Package | Version | Purpose |
-|---|---|---|
-| `react` | ^19.3.1 | UI library |
-| `react-dom` | ^19.3.1 | React DOM renderer |
-| `react-router` | ^8.5.0 | Routing primitives (HashRouter, Routes) |
-| `axios` | ^1.20.0 | HTTP client for the `/api` backend |
+| Package        | Version | Purpose                                 |
+| -------------- | ------- | --------------------------------------- |
+| `react`        | ^19.3.1 | UI library                              |
+| `react-dom`    | ^19.3.1 | React DOM renderer                      |
+| `react-router` | ^8.5.0  | Routing primitives (HashRouter, Routes) |
+| `axios`        | ^1.20.0 | HTTP client for the `/api` backend      |
 
 ### Development
 
-| Package | Version | Purpose |
-|---|---|---|
-| `@types/react` | ^19.3.0 | React type definitions |
-| `@types/react-dom` | ^19.3.0 | ReactDOM type definitions |
-| `@types/node` | ^24.19.2 | Node type definitions (Vite config) |
-| `@vitejs/plugin-react` | ^6.1.2 | React support (Fast Refresh) in Vite |
-| `@vitest/ui` | ^5.0.3 | Interactive test UI |
-| `vite` | ^8.3.4 | Dev server + SPA bundler |
-| `vitest` | ^5.0.3 | Unit test runner |
-| `typescript` | ^5.4.0 | Type checking / JSX |
-| `jsdom` | ^30.1.2 | DOM environment for tests |
+| Package                | Version  | Purpose                              |
+| ---------------------- | -------- | ------------------------------------ |
+| `@types/react`         | ^19.3.0  | React type definitions               |
+| `@types/react-dom`     | ^19.3.0  | ReactDOM type definitions            |
+| `@types/node`          | ^24.19.2 | Node type definitions (Vite config)  |
+| `@vitejs/plugin-react` | ^6.1.2   | React support (Fast Refresh) in Vite |
+| `@vitest/ui`           | ^5.0.3   | Interactive test UI                  |
+| `vite`                 | ^8.3.4   | Dev server + SPA bundler             |
+| `vitest`               | ^5.0.3   | Unit test runner                     |
+| `typescript`           | ^5.4.0   | Type checking / JSX                  |
+| `jsdom`                | ^30.1.2  | DOM environment for tests            |
 
 ## Keeping this file up to date
 

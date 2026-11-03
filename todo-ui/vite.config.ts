@@ -10,9 +10,7 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
   },
-  plugins: [
-    react(),
-  ],
+  plugins: [react()],
   build: {
     rollupOptions: {
       input: {
@@ -24,7 +22,7 @@ export default defineConfig({
         // Emit modular ES JavaScript as .mjs files (non-JS assets keep their extension)
         entryFileNames: 'assets/[name]-[hash].mjs',
         chunkFileNames: 'assets/[name]-[hash].mjs',
-      }
+      },
     },
   },
   server: {
@@ -33,8 +31,8 @@ export default defineConfig({
       '/api': {
         target: 'http://localhost:8080',
         changeOrigin: true,
-        secure: false
-      }
+        secure: false,
+      },
     },
   },
 });
