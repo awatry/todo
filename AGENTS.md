@@ -1,22 +1,30 @@
 # Project Architecture & Guidelines
 
 ## Architecture Overview
-This project is a full-stack Todo list application consisting of a frontend, a backend, and an infrastructure layer.
+This project is a monorepo for a full-stack Todo list application consisting of a frontend, a backend, and an
+infrastructure layer.
 
-- **Frontend**: A Single Page Application (SPA) built with **React 19** and **Vite**. It handles the user interface and interacts with the backend API via **Axios**.
-- **Backend**: A **Java Spring Boot** application that provides the RESTful API. It uses **Spring Data JPA** for persistence and **Spring HATEOAS** for hypermedia-driven API design.
+- **Frontend**: A Single Page Application (SPA) built with **React 19** and **Vite**. It handles the user interface
+  and interacts with the backend API via **Axios**.
+- **Backend**: A **Java Spring Boot** application that provides the RESTful API. It uses **Spring Data JPA** for
+  persistence and **Spring HATEOAS** for hypermedia-driven API design.
+- **API contract**: Both projects share a single API contract defined in **OpenAPI 3.0** at
+  `todo/src/main/resources/openapi.yaml` (in the Java `todo` project). Keep the API implementation,
+  the `todo-ui` client code, and this spec in sync with each other.
 - **Database**: 
     - **PostgreSQL** is used as the primary relational database.
     - **H2** is used as an in-memory database for testing.
 - **Infrastructure**:
     - **Nginx** serves as the reverse proxy and web server.
-    - **Docker & Docker Compose** are used to containerize and orchestrate the entire stack (PostgreSQL, Backend, Nginx).
+    - **Docker & Docker Compose** are used to containerize and orchestrate the entire stack (PostgreSQL, Backend,
+      Nginx).
 
 ## Technology Stack
 - **Frontend**: React, Vite, Axios, React Router.
 - **Backend**: Java 25, Spring Boot 4.1.1, Maven, JPA, Hibernate, Lombok.
 - **Database**: PostgreSQL, H2.
 - **DevOps**: Docker, Docker Compose, Nginx.
+- **Build**: Mise
 
 ## Build and Development
 ### Prerequisites

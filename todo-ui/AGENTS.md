@@ -16,7 +16,7 @@ todo-ui/
 ├── package.json
 ├── tsconfig.json         # App TS config (ESNext, bundler, jsx: react-jsx)
 ├── tsconfig.node.json    # Vite config TS config (ES2020, bundler)
-├── vite.config.ts        # Dev server + library build config
+├── vite.config.ts        # Dev server + SPA build config
 ├── vitest.config.ts      # Test runner config
 ├── .gitignore            # node_modules, dist, build, .env*, *.local, etc.
 └── src/
@@ -29,18 +29,18 @@ todo-ui/
 
 ### Build modes
 
-`vite.config.ts` configures Vite in **library mode** (`build.lib`):
+`vite.config.ts` configures Vite in **SPA mode** (`no build.lib is set`):
 
 - **Entry:** `src/main.tsx`
 - **Global name:** `TodoLists`
-- **Output:** `dist/todo-lists.js` (UMD, global `TodoLists`) and
-  `dist/todo-lists.es.js` (ES module); CSS is extracted to `dist/todo-lists.css`
+- **Output:** `dist/assets/main-*.mjs` (UMD, global `TodoLists`) and
+  `dist/assets/main-*.mjs` (ES module); CSS is extracted to `dist/assets/main-*.css`
 - `define` pins `process.env.NODE_ENV` to `production`
 - `react` and `react-dom` are **not** externalized, so they are bundled into
   the output (which is why the UMD bundle is ~416 kB)
 
 In dev mode (`npm run dev`), `index.html` is served and `src/main.tsx` is
-loaded directly as an ES module — the library wrapper is not used.
+loaded directly as an ES module.
 
 ### Frontend application (`src/`)
 
@@ -54,6 +54,10 @@ loaded directly as an ES module — the library wrapper is not used.
 
 The UI is a thin client for the `todo` backend:
 
+- **API contract**: The shared API contract is defined in OpenAPI 3.0 in the
+  Java `todo` project at `../todo/src/main/resources/openapi.yaml` — consult
+  it (and keep it in sync) whenever adding, changing, or removing API calls
+  here.
 - API base: `/api` (relative)
 - Dev server proxies `/api` -> `http://localhost:8080` (see
   `vite.config.ts` `server.proxy`)
@@ -151,7 +155,7 @@ The test suite currently contains a single placeholder test in
 | `@types/node` | ^24.19.2 | Node type definitions (Vite config) |
 | `@vitejs/plugin-react` | ^6.1.2 | React support (Fast Refresh) in Vite |
 | `@vitest/ui` | ^5.0.3 | Interactive test UI |
-| `vite` | ^8.3.4 | Dev server + library bundler |
+| `vite` | ^8.3.4 | Dev server + SPA bundler |
 | `vitest` | ^5.0.3 | Unit test runner |
 | `typescript` | ^5.4.0 | Type checking / JSX |
 | `jsdom` | ^30.1.2 | DOM environment for tests |
@@ -169,7 +173,7 @@ following must trigger an update to this file:
 - **Dependencies** — adding, removing, or changing the version of a package
   (runtime or dev, especially major-version bumps): update the tables under
   "Dependencies" and the "Build tools" list when the tooling itself changes.
-- **Architecture** — changes to the build setup (library mode, entry,
+- **Architecture** — changes to the build setup (SPA mode, entry,
   outputs, externals, `package.json` scripts), routing, the API base path or
   dev-proxy target, or the test tooling: update the affected "Architecture",
   "Build tools", and "How to ..." sections.
@@ -192,7 +196,7 @@ it rather than the other way around.
 - **`npm run build` runs `tsc` first** — the `build` script is
   `npm run type-check && vite build`, so type errors fail the build; run
   `npm run type-check` on its own for fast feedback while editing.
-- **CSS is extracted** to `dist/todo-lists.css` in the library build; in dev
+- **CSS is extracted** to `dist/todo-lists.css` in the SPA build; in dev
   mode styles are injected by Vite.
 - The project is part of a monorepo; sibling services live in `../todo/`
   (Java Spring Boot backend) and the top-level `../AGENTS.md` has the big picture.
