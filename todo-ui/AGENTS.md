@@ -68,6 +68,7 @@ The UI is a thin client for the `todo` backend:
 
 - **Vite 8** — dev server and bundler
 - **@vitejs/plugin-react 6** — React JSX/Fast Refresh support
+- **Tailwind CSS** — utility-first CSS framework
 - **TypeScript 5** — type definitions and JSX (`jsx: react-jsx`)
 - **Vitest 5** — unit test runner (jsdom environment)
 - **jsdom 30** — DOM simulation for tests
@@ -177,6 +178,7 @@ The test suite currently contains a single placeholder test in
 | `react`        | ^19.3.1 | UI library                              |
 | `react-dom`    | ^19.3.1 | React DOM renderer                      |
 | `react-router` | ^8.5.0  | Routing primitives (HashRouter, Routes) |
+| `tailwindcss`  | ^4.3.4  | Utility-first CSS framework             |
 | `axios`        | ^1.20.0 | HTTP client for the `/api` backend      |
 
 ### Development
