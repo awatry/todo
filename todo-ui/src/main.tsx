@@ -1,38 +1,14 @@
 import { useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import axios from 'axios';
-import { HashRouter, Routes, Route, Link, useParams, useLocation } from 'react-router';
+import { HashRouter, Routes, Route, Link, useParams } from 'react-router';
 import TodoList from '@/components/TodoList';
 import CreateTodoList from '@/components/CreateTodoList';
+import RouteDisplay from './components/RouteDisplay';
 
 interface TodoListSummary {
   id: string;
   title: string;
-}
-
-function RouteDisplay() {
-  const location = useLocation();
-  const pathParts = location.pathname.split('/').filter(Boolean);
-
-  // Determine the parent route
-  let parentPath = '/';
-  if (pathParts.length > 0) {
-    // If it's a 'todo/:id' route, the parent is '/'
-    if (pathParts[0] === 'todo') {
-      parentPath = '/';
-    } else {
-      // For other routes, we go one level up
-      const parentParts = pathParts.slice(0, -1);
-      parentPath = '/' + parentParts.join('/');
-    }
-  }
-
-  return (
-    <p>
-      <strong className="font-bold">Current route path:</strong> {location.pathname}{' '}
-      <Link to={parentPath}>Go back</Link>
-    </p>
-  );
 }
 
 function Home() {
