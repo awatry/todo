@@ -10,8 +10,32 @@ interface TodoListSummary {
   title: string;
 }
 
-function Home() {
+function RouteDisplay() {
   const location = useLocation();
+  const pathParts = location.pathname.split('/').filter(Boolean);
+
+  // Determine the parent route
+  let parentPath = '/';
+  if (pathParts.length > 0) {
+    // If it's a 'todo/:id' route, the parent is '/'
+    if (pathParts[0] === 'todo') {
+      parentPath = '/';
+    } else {
+      // For other routes, we go one level up
+      const parentParts = pathParts.slice(0, -1);
+      parentPath = '/' + parentParts.join('/');
+    }
+  }
+
+  return (
+    <p>
+      <strong className="font-bold">Current route path:</strong> {location.pathname}{' '}
+      <Link to={parentPath}>Go back</Link>
+    </p>
+  );
+}
+
+function Home() {
   const [todoLists, setTodoLists] = useState<TodoListSummary[]>([]);
 
   useEffect(() => {
@@ -27,10 +51,7 @@ function Home() {
 
   return (
     <div>
-      <p>
-        <strong className="font-bold">Current route path:</strong> {location.pathname}{' '}
-        <Link to="/">Go back</Link>
-      </p>
+      <RouteDisplay />
       <div style={{ marginBottom: '20px' }}>
         <Link to="/create-todo-list">Create New Todo List</Link>
       </div>
@@ -45,11 +66,21 @@ function Home() {
 
 function TodoListRoute() {
   const { id } = useParams<{ id: string }>();
-  return <TodoList id={id ?? ''} />;
+  return (
+    <div>
+      <RouteDisplay />
+      <TodoList id={id ?? ''} />
+    </div>
+  );
 }
 
 function CreateTodoListRoute() {
-  return <CreateTodoList />;
+  return (
+    <div>
+      <RouteDisplay />
+      <CreateTodoList />
+    </div>
+  );
 }
 
 function App() {
