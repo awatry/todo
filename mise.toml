@@ -36,3 +36,7 @@ run = "mvn package"
 [tasks.up]
 depends = ["package:docker"]
 run = "docker compose up"
+
+[tasks."up:ui"]
+depends = ["build:js"]
+run = "docker compose up --build"
