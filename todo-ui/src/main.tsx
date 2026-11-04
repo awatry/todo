@@ -29,11 +29,13 @@ function Home() {
     <div>
       <RouteDisplay />
       <div style={{ marginBottom: '20px' }}>
-        <Link to="/create-todo-list">Create New Todo List</Link>
+        <Link className="btn-primary" to="/create-todo-list">
+          Create New Todo List
+        </Link>
       </div>
       {todoLists.map((todoList) => (
         <div key={todoList.id}>
-          {todoList.title} <Link to={`/todo/${todoList.id}`}>View {todoList.title}</Link>
+          <Link to={`/todo/${todoList.id}`}>{todoList.title}</Link>
         </div>
       ))}
     </div>

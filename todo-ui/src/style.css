@@ -267,3 +267,18 @@ code {
     border-right-color: var(--border);
   }
 }
+
+.btn-primary {
+  display: inline-block;
+  padding: 8px 16px;
+  background-color: var(--accent);
+  color: white;
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: 500;
+  transition: box-shadow 0.3s;
+}
+
+.btn-primary:hover {
+  box-shadow: var(--shadow);
+}
