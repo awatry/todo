@@ -100,16 +100,18 @@ public class TodoListController implements TodoListApi {
         TodoListCollectionItem ci = new TodoListCollectionItem(entity.getTitle(), entity.getPosition());
         ci.setId(entity.getId());
 
-        List<ListItem> topLevelItems = entity.getTopLevelItems().stream()
-                .map(ei -> {
-                    ListItem li = new ListItem(ei.getTitle(), ei.getPosition(), entityTypeToDtoType(ei.getType()));
-                    li.setComplete(ei.getComplete());
-                    li.setId(ei.getId());
-                    li.setItemText(ei.getItemText());
-                    return li;
-                })
-                .toList();
-        ci.setTopLevelItems(topLevelItems);
+        if (entity.getTopLevelItems() != null) {
+            List<ListItem> topLevelItems = entity.getTopLevelItems().stream()
+                    .map(ei -> {
+                        ListItem li = new ListItem(ei.getTitle(), ei.getPosition(), entityTypeToDtoType(ei.getType()));
+                        li.setComplete(ei.getComplete());
+                        li.setId(ei.getId());
+                        li.setItemText(ei.getItemText());
+                        return li;
+                    })
+                    .toList();
+            ci.setTopLevelItems(topLevelItems);
+        }
 
         if (entity.getCreatedAt() != null) {
             ci.setCreatedAt(OffsetDateTime.ofInstant(entity.getCreatedAt(), ZoneId.systemDefault()));
