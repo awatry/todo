@@ -116,8 +116,30 @@ function CreateTodoListRoute() {
 }
 
 function App() {
+  const [darkMode, setDarkMode] = useState(false);
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+      setDarkMode(true);
+    }
+  }, []);
+
+  const toggleDarkMode = () => {
+    setDarkMode((prev) => {
+      const next = !prev;
+      localStorage.setItem('theme', next ? 'dark' : 'light');
+      return next;
+    });
+  };
+
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen {darkMode ? 'dark-mode' : ''}" style={{ background: 'var(--bg)' }}>
+      <nav className="p-4 border-b" style={{ borderColor: 'var(--border)' }}>
+        <button onClick={toggleDarkMode} className="btn-primary" style={{ marginBottom: '10px' }}>
+          {darkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+        </button>
+      </nav>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/todo/:id" element={<TodoListRoute />} />
