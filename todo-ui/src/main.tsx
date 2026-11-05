@@ -133,9 +133,11 @@ function App() {
     });
   };
 
+  const themeName = darkMode ? 'dark' : '';
+
   return (
-    <div className="min-h-screen {darkMode ? 'dark-mode' : ''}" style={{ background: 'var(--bg)' }}>
-      <nav className="p-4 border-b" style={{ borderColor: 'var(--border)' }}>
+    <div className={`min-h-screen ${themeName} bg-background text-text`}>
+      <nav className="p-4 border-b border-border">
         <button onClick={toggleDarkMode} className="btn-primary" style={{ marginBottom: '10px' }}>
           {darkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
         </button>

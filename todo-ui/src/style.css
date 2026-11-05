@@ -1,5 +1,18 @@
 @import 'tailwindcss';
 
+@theme {
+  --color-background: var(--bg);
+  --color-text: var(--text);
+  --color-heading: var(--text-h);
+  --color-border: var(--border);
+  --color-code-bg: var(--code-bg);
+  --color-accent: var(--accent);
+  --color-accent-bg: var(--accent-bg);
+  --color-accent-border: var(--accent-border);
+  --color-social-bg: var(--social-bg);
+  --color-shadow: var(--shadow);
+}
+
 :root {
   --text: #3c393f;
   --text-h: #08060d;
@@ -31,7 +44,7 @@
   }
 }
 
-.dark-mode {
+.dark {
   --text: #3c393f;
   --text-h: #575757;
   --bg: #16171d;
