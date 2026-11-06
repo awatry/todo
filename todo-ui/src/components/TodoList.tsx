@@ -162,6 +162,9 @@ const TodoList = (props: TodoListProps) => {
           display: flex;
           align-items: center;
           margin-bottom: 10px;
+          padding: 8px;
+          border-radius: 6px;
+          border: 1px solid var(--border);
         }
         .section-title {
           font-weight: bold;
@@ -181,7 +184,8 @@ const TodoList = (props: TodoListProps) => {
         .item-text {
           margin: 0;
           font-size: 0.9em;
-          color: #666;
+          color: var(--text);
+          opacity: 0.8;
         }
       `}</style>
     </div>

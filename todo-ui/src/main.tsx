@@ -115,31 +115,71 @@ function CreateTodoListRoute() {
   );
 }
 
+function getEffectiveTheme(themeName: string): string {
+  switch (themeName) {
+    case 'light':
+      return 'light';
+    case 'dark':
+      return 'dark';
+    case 'auto':
+    default:
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  }
+}
+
+function getNextTheme(themeName: string): string {
+  switch (themeName) {
+    case 'dark':
+      return 'auto';
+    case 'light':
+      return 'dark';
+    default:
+      return 'light';
+  }
+}
+
+function getNextThemeLabel(nextName: string): string {
+  return `Switch to ${nextName} mode`;
+}
+
 function App() {
-  const [darkMode, setDarkMode] = useState(false);
-
-  useEffect(() => {
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark') {
-      setDarkMode(true);
+  const [theme, setTheme] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme && savedTheme !== 'auto') {
+        return savedTheme;
+      }
+      const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      return systemPrefersDark ? 'dark' : 'light';
     }
-  }, []);
+  });
 
-  const toggleDarkMode = () => {
-    setDarkMode((prev) => {
-      const next = !prev;
-      localStorage.setItem('theme', next ? 'dark' : 'light');
-      return next;
-    });
+  // Watch theme changes to sync with HTML tag and localStorage
+  useEffect(() => {
+    const root = window.document.documentElement;
+    const effectiveTheme = getEffectiveTheme(String(theme));
+    if (effectiveTheme === 'dark') {
+      root.classList.add('dark');
+    } else {
+      root.classList.remove('dark');
+    }
+    localStorage.setItem('theme', String(theme));
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme((prev) => getNextTheme(String(prev)));
   };
 
-  const themeName = darkMode ? 'dark' : '';
+  const themeName = typeof theme === 'string' ? theme : 'auto';
+  const nextTheme = getNextTheme(themeName);
+  const nextThemeLabel = getNextThemeLabel(nextTheme);
 
   return (
     <div className={`min-h-screen ${themeName} bg-background text-text`}>
       <nav className="p-4 border-b border-border">
-        <button onClick={toggleDarkMode} className="btn-primary" style={{ marginBottom: '10px' }}>
-          {darkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+        <span>Current theme: {themeName}</span>
+        <button onClick={toggleTheme} className="btn-primary" style={{ marginBottom: '10px' }}>
+          {nextThemeLabel}
         </button>
       </nav>
       <Routes>
