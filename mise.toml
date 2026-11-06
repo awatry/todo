@@ -4,18 +4,18 @@ java = "25"
 node = "24"
 
 [tasks.build]
-depends = [ "build:js", "build:java" ]
+depends = ["build:js", "build:java"]
 
 [tasks."build:js"]
 run = "npm run build"
 dir = "todo-ui"
 
 [tasks."build:java"]
-run = "mvn package"
+run = "mvn compile"
 dir = "todo"
 
 [tasks.test]
-depends = [ "test:js", "test:java" ]
+depends = ["test:js", "test:java"]
 
 [tasks."test:js"]
 run = "npm run test"
@@ -25,18 +25,27 @@ dir = "todo-ui"
 run = "mvn test"
 dir = "todo"
 
-[tasks."package:docker"]
-depends=["build:js", "package:java"]
-run = "docker compose build"
-
 [tasks."package:java"]
 dir = "todo"
 run = "mvn package"
 
 [tasks.up]
-depends = ["package:docker"]
-run = "docker compose up"
+depends = ["build:js", "package:java"]
+run = "docker compose up --build"
 
+# Start the UI without building the back-end
 [tasks."up:ui"]
 depends = ["build:js"]
 run = "docker compose up --build"
+
+[tasks."start:backend"]
+depends = ["package:java"]
+run = "docker compose up --build"
+
+[tasks."start:ui"]
+dir = "todo-ui"
+run = "echo 'Connect on http://localhost:3000/' && npm run dev"
+
+#Build and deploy the backend, and then run the vite dev server for hot-reloading
+[tasks.start]
+depends = ["start:backend", "start:ui"]
