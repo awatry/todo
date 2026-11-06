@@ -2,6 +2,7 @@
 
 @theme {
   --color-background: var(--bg);
+  --color-draggable: var(--draggable);
   --color-text: var(--text);
   --color-heading: var(--text-h);
   --color-border: var(--border);
@@ -16,7 +17,8 @@
 :root {
   --text: #3c393f;
   --text-h: #08060d;
-  --bg: #fff;
+  --bg: #ffffff;
+  --draggable: #cccccc;
   --border: #e5e4e7;
   --code-bg: #f4f3ec;
   --accent: #aa3bff;
@@ -48,6 +50,7 @@
   --text: #e2e8f0;
   --text-h: #f8fafc;
   --bg: #020617;
+  --draggable: #2c2c2c;
   --border: #1e293b;
   --code-bg: #0f172a;
   --accent: #a855f7;

@@ -24,7 +24,7 @@ export default function SortableListItem({ id, title }: SortableListItemProps) {
       style={style}
       {...attributes}
       {...listeners}
-      className="p-2 border rounded shadow-sm bg-white cursor-grab active:cursor-grabbing"
+      className="p-2 border rounded shadow-sm bg-draggable cursor-grab active:cursor-grabbing"
     >
       <Link to={`/todo/${id}`}>{title}</Link>
     </div>
