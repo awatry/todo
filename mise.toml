@@ -38,6 +38,7 @@ run = "docker compose up --build"
 depends = ["build:js"]
 run = "docker compose up --build"
 
+#TODO: deploy springboot directly so it hot reloads as well.
 [tasks."start:backend"]
 depends = ["package:java"]
 run = "docker compose up --build"
@@ -47,5 +48,5 @@ dir = "todo-ui"
 run = "echo 'Connect on http://localhost:3000/' && npm run dev"
 
 #Build and deploy the backend, and then run the vite dev server for hot-reloading
-[tasks.start]
+[tasks.dev]
 depends = ["start:backend", "start:ui"]
