@@ -53,7 +53,7 @@
   --draggable: #2c2c2c;
   --border: #1e293b;
   --code-bg: #0f172a;
-  --accent: #a855f7;
+  --accent: #5b3281;
   --accent-bg: rgba(168, 85, 247, 0.15);
   --accent-border: rgba(168, 85, 247, 0.4);
   --social-bg: rgba(15, 23, 42, 0.6);
@@ -113,5 +113,20 @@ p {
 }
 
 .btn-primary:hover {
+  box-shadow: var(--shadow);
+}
+
+.btn-cancel {
+  display: inline-block;
+  padding: 8px 16px;
+  background-color: var(--accent);
+  color: white;
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: 500;
+  transition: box-shadow 0.3s;
+}
+
+.btn-cancel:hover {
   box-shadow: var(--shadow);
 }

@@ -95,12 +95,14 @@ const TodoList = (props: TodoListProps) => {
       <div>
         {!isEditing ? (
           <>
-            <h1 className="component-title">{todoList.title} - Component</h1>
-            <button onClick={startEdit}>Edit</button>
+            <h1 onClick={startEdit} className="component-title">
+              List: {todoList.title}
+            </h1>
           </>
         ) : (
           <>
             <h1 className="component-title">
+              List:
               <input
                 type="text"
                 value={tempTitle}
@@ -110,10 +112,13 @@ const TodoList = (props: TodoListProps) => {
                 }}
                 onBlur={saveTitle}
               />{' '}
-              - Component
             </h1>
-            <button onClick={saveTitle}>Save</button>
-            <button onClick={cancelEdit}>Cancel</button>
+            <button className="btn-primary" onClick={saveTitle}>
+              Save
+            </button>
+            <button className="btn-cancel" onClick={cancelEdit}>
+              Cancel
+            </button>
           </>
         )}
       </div>
