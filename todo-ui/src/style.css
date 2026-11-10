@@ -26,6 +26,8 @@
   --accent-border: rgba(170, 59, 255, 0.5);
   --social-bg: rgba(244, 243, 236, 0.5);
   --shadow: rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+  --cancel: #9ca3af;
+
 
   --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
   --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
@@ -58,6 +60,7 @@
   --accent-border: rgba(168, 85, 247, 0.4);
   --social-bg: rgba(15, 23, 42, 0.6);
   --shadow: rgba(0, 0, 0, 0.8) 0 10px 15px -3px, rgba(0, 0, 0, 0.6) 0 4px 6px -2px;
+  --cancel: #475569;
 }
 
 h1,
@@ -104,6 +107,7 @@ p {
 .btn-primary {
   display: inline-block;
   padding: 8px 16px;
+  margin-right: 8px;
   background-color: var(--accent);
   color: white;
   text-decoration: none;
@@ -119,7 +123,7 @@ p {
 .btn-cancel {
   display: inline-block;
   padding: 8px 16px;
-  background-color: var(--accent);
+  background-color: var(--cancel);
   color: white;
   text-decoration: none;
   border-radius: 6px;
