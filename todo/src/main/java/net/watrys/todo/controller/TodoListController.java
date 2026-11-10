@@ -18,6 +18,7 @@ import net.watrys.todo.repository.TodoListRepository;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -136,5 +137,12 @@ public class TodoListController implements TodoListApi {
             default:
                 throw new IllegalArgumentException("Unknown enum type");
         }
+    }
+
+    @DeleteMapping("/{id}")
+    @Override
+    public ResponseEntity<Void> deleteTodoListById(Long id) {
+        repository.deleteById(id);
+        return ResponseEntity.ok().build();
     }
 }

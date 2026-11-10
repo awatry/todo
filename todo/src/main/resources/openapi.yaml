@@ -231,7 +231,24 @@ paths:
           description: Todo list not found
         '422':
           description: Invalid request (e.g., ID mismatch)
-
+    delete:
+      summary: Delete a todo list
+      tags:
+        - "TodoList"
+      operationId: deleteTodoListById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: The unique identifier of the todo list to delete
+      responses:
+        '204':
+          description: Todo list deleted successfully
+        '404':
+          description: Todo list not found
 
   /api/list-items:
     get:
