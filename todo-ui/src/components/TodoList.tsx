@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router';
 
 // --- Type Definitions ---
 
@@ -25,10 +26,13 @@ interface TodoListProps {
 }
 
 const TodoList = (props: TodoListProps) => {
+  const navigate = useNavigate();
+
   // --- Reactive State ---
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [tempTitle, setTempTitle] = useState<string>('');
   const [todoList, setTodoList] = useState<TodoListData | null>(null);
+  const [isDeleting, setIsDeleting] = useState<boolean>(false);
 
   // --- Lifecycle Hooks ---
   useEffect(() => {
@@ -82,6 +86,26 @@ const TodoList = (props: TodoListProps) => {
     // Reset temp title to the current state of the todoList title
     if (todoList) {
       setTempTitle(todoList.title);
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!todoList) return;
+
+    const confirmed = window.confirm(
+      `Are you sure you want to delete the todo list "${todoList.title}"? This action cannot be undone.`
+    );
+    if (!confirmed) return;
+
+    setIsDeleting(true);
+    try {
+      await axios.delete(`/api/todo-lists/${props.id}`);
+      // Deleted successfully — navigate back to the parent route
+      navigate('/');
+    } catch (error) {
+      console.error('Error deleting todo list:', error);
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -154,6 +178,12 @@ const TodoList = (props: TodoListProps) => {
           ))}
         </ul>
       )}
+
+      <div style={{ marginTop: '20px' }}>
+        <button className="btn-danger" onClick={handleDelete} disabled={isDeleting}>
+          {isDeleting ? 'Deleting...' : 'Delete'}
+        </button>
+      </div>
 
       <style>{`
         .component-title {

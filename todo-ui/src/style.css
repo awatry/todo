@@ -27,7 +27,7 @@
   --social-bg: rgba(244, 243, 236, 0.5);
   --shadow: rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
   --cancel: #9ca3af;
-
+  --danger: #dc2626;
 
   --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
   --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
@@ -61,6 +61,7 @@
   --social-bg: rgba(15, 23, 42, 0.6);
   --shadow: rgba(0, 0, 0, 0.8) 0 10px 15px -3px, rgba(0, 0, 0, 0.6) 0 4px 6px -2px;
   --cancel: #475569;
+  --danger: #ef4444;
 }
 
 h1,
@@ -132,5 +133,20 @@ p {
 }
 
 .btn-cancel:hover {
+  box-shadow: var(--shadow);
+}
+
+.btn-danger {
+  display: inline-block;
+  padding: 8px 16px;
+  background-color: var(--danger);
+  color: white;
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: 500;
+  transition: box-shadow 0.3s;
+}
+
+.btn-danger:hover {
   box-shadow: var(--shadow);
 }
