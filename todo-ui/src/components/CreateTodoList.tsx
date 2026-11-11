@@ -95,12 +95,12 @@ const CreateTodoList = () => {
             style={{ width: '100px' }}
           />
         </div>
-        <button type="submit" disabled={isLoading}>
+        <button type="submit" disabled={isLoading} className="btn-primary">
           {isLoading ? 'Creating...' : 'Create Todo List'}
         </button>
       </form>
       {error && <p style={{ color: 'red' }}>{error}</p>}
-      <button onClick={() => navigate('/')} style={{ marginTop: '20px' }}>
+      <button onClick={() => navigate('/')} style={{ marginTop: '20px' }} className="btn-cancel">
         Cancel
       </button>
     </div>
