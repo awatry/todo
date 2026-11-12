@@ -21,6 +21,7 @@
   --draggable: #cccccc;
   --border: #e5e4e7;
   --code-bg: #f4f3ec;
+  --input-bg: #e5e4dd;
   --accent: #aa3bff;
   --accent-bg: rgba(170, 59, 255, 0.1);
   --accent-border: rgba(170, 59, 255, 0.5);
@@ -55,6 +56,7 @@
   --draggable: #2c2c2c;
   --border: #1e293b;
   --code-bg: #0f172a;
+  --input-bg: #1e293b;
   --accent: #5b3281;
   --accent-bg: rgba(168, 85, 247, 0.15);
   --accent-border: rgba(168, 85, 247, 0.4);
@@ -103,6 +105,11 @@ p {
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
+}
+
+input[type='text'],
+input[type='number'] {
+  background-color: var(--input-bg);
 }
 
 .btn-primary {
