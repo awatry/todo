@@ -10,6 +10,7 @@ import net.watrys.todo.assembler.ListItemAssembler;
 import net.watrys.todo.dto.ListItem;
 import net.watrys.todo.dto.ListItemCollectionItem;
 import net.watrys.todo.repository.ListItemRepository;
+import net.watrys.todo.repository.TodoListRepository;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.http.ResponseEntity;
@@ -24,10 +25,14 @@ public class ListItemController implements ListItemApi {
 
     private final ListItemRepository repository;
 
+    private final TodoListRepository todoListRepository;
+
     private final ListItemAssembler assembler;
 
-    ListItemController(ListItemRepository repository, ListItemAssembler assembler) {
+    ListItemController(
+            ListItemRepository repository, TodoListRepository todoListRepository, ListItemAssembler assembler) {
         this.repository = repository;
+        this.todoListRepository = todoListRepository;
         this.assembler = assembler;
     }
 
@@ -101,11 +106,16 @@ public class ListItemController implements ListItemApi {
         ci.setTitle(entity.getTitle());
         ci.setPosition(entity.getPosition());
         ci.setTodoListId(entity.getTodoListId());
+        ci.setParentTitle(entity.getParentTitle());
         ci.setParentId(entity.getParentId());
         ci.setItemText(entity.getItemText());
         ci.setComplete(entity.getComplete());
         ci.setType(entityTypeToDtoType(entity.getType()));
         ci.setId(entity.getId());
+        if (entity.getParentTitle() == null && entity.getTodoListId() != null) {
+            todoListRepository.findById(entity.getTodoListId().longValue()).ifPresent(entity::setTodoList);
+        }
+        ci.setParentTitle(entity.getParentTitle());
         if (entity.getCreatedAt() != null) {
             ci.setCreatedAt(OffsetDateTime.ofInstant(entity.getCreatedAt(), ZoneId.systemDefault()));
         }

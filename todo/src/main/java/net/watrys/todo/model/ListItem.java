@@ -14,6 +14,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OrderBy;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
+import jakarta.persistence.Transient;
 import java.time.Instant;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -86,6 +87,22 @@ public class ListItem {
     @Builder.Default
     @Column(nullable = false)
     private Boolean complete = Boolean.FALSE;
+
+    /**
+     * Transient (not persisted) title of the parent todo list.
+     * <p>
+     * Either set explicitly (e.g. after a repository load in the controller) or
+     * derived from the {@link #todoList} relationship when it is populated.
+     */
+    @Transient
+    private String parentTitle;
+
+    public String getParentTitle() {
+        if (parentTitle != null) {
+            return parentTitle;
+        }
+        return todoList != null ? todoList.getTitle() : null;
+    }
 
     public ListItem(String title, ItemType type, String itemText, Integer todoListId, Integer parentId) {
         this.title = title;
