@@ -1,7 +1,14 @@
 # Todo TODO
 
 1. Add PATCH support for lists/items
-1. Add support for creating list items
+1. DONE - Add support for creating list items
+1. Don't require position when creating items/lists.
+   1. Calculate it on the back-end
+   1. Still require it for updates unless we do PATCH support.
+1. Add component for List Item viewing.
+   1. Only show 'itemText' in this view.
+   1. Show createdAt/createdBy here.
+   1. Allow deleting from this view. Return to parent when delete succeeds.
 1. Include support for notes/text
    1. Add section/task support
    1. sections can have sub-items, but are not themselves completable
