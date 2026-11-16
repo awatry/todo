@@ -6,6 +6,7 @@ import axios from 'axios';
 import { HashRouter, Routes, Route, Link, useParams } from 'react-router';
 import TodoList from '@/components/TodoList';
 import CreateTodoList from '@/components/CreateTodoList';
+import CreateListItem from '@/components/CreateListItem';
 import RouteDisplay from './components/RouteDisplay';
 import {
   DndContext,
@@ -115,6 +116,16 @@ function CreateTodoListRoute() {
   );
 }
 
+function CreateListItemRoute() {
+  const { id } = useParams<{ id: string }>();
+  return (
+    <div>
+      <RouteDisplay />
+      <CreateListItem todoListId={Number(id)} />
+    </div>
+  );
+}
+
 function getEffectiveTheme(themeName: string): string {
   switch (themeName) {
     case 'light':
@@ -185,6 +196,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/todo/:id" element={<TodoListRoute />} />
+        <Route path="/todo/:id/create-list-item" element={<CreateListItemRoute />} />
         <Route path="/create-todo-list" element={<CreateTodoListRoute />} />
       </Routes>
     </div>

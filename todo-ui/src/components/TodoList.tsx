@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 
 // --- Type Definitions ---
 
@@ -180,6 +180,12 @@ const TodoList = (props: TodoListProps) => {
       )}
 
       <div style={{ marginTop: '20px' }}>
+        <button
+          className="btn-primary"
+          onClick={() => navigate(`/todo/${props.id}/create-list-item`)}
+        >
+          Create New List Item
+        </button>{' '}
         <button className="btn-danger" onClick={handleDelete} disabled={isDeleting}>
           {isDeleting ? 'Deleting...' : 'Delete'}
         </button>

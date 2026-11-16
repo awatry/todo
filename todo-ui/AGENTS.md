@@ -22,7 +22,11 @@ todo-ui/
 └── src/
     ├── main.tsx          # App entry: HashRouter + routes + API bootstrap
     ├── components/
-    │   └── TodoList.tsx  # Main UI component (list, add, toggle, delete)
+    │   ├── TodoList.tsx          # Main UI component (list, add, toggle, delete, drag-sort)
+    │   ├── CreateTodoList.tsx    # "Create New Todo List" form
+    │   ├── CreateListItem.tsx    # "Create New List Item" form (child of the viewed list)
+    │   ├── SortableListItem.tsx  # Draggable/indented list item row
+    │   └── RouteDisplay.tsx      # Breadcrumb navigation from the current hash route
     └── __tests__/
         └── dummy.test.ts # Sample Vitest test
 ```
@@ -48,7 +52,20 @@ loaded directly as an ES module.
   `Route` for `/` and fetches todo data from `/api/todo-lists` (via `axios`)
   on mount.
 - **`components/TodoList.tsx`** — the primary component; renders the todo
-  list, handles adding new todos, toggling completion, and deleting items.
+  list, handles adding new todos, toggling completion, and deleting items, and
+  reorders items by drag-and-drop (`@dnd-kit`). It also renders a
+  "Create New List Item" button that links to `/todo/:id/create-list-item`.
+- **`components/CreateTodoList.tsx`** — the "Create New Todo List" form
+  (`POST /api/todo-lists`), reachable from the home page.
+- **`components/CreateListItem.tsx`** — the "Create New List Item" form
+  (`POST /api/list-items`); prompts for title, type (`SECTION` / `LIST_ITEM`),
+  optional itemText, and position, and creates the item as a top-level child of
+  the todo list being viewed (the `:id` route param).
+- **`components/SortableListItem.tsx`** — a single draggable, indented list
+  item row with complete checkbox, delete, and collapse controls.
+- **`components/RouteDisplay.tsx`** — a breadcrumb derived from the current
+  hash route (e.g. `/todo/1` → Home > 1; `/todo/1/create-list-item` →
+  Home > 1 > Go back to list).
 
 ### Backend interaction
 
@@ -173,13 +190,16 @@ The test suite currently contains a single placeholder test in
 
 ### Runtime
 
-| Package        | Version | Purpose                                 |
-| -------------- | ------- | --------------------------------------- |
-| `react`        | ^19.3.1 | UI library                              |
-| `react-dom`    | ^19.3.1 | React DOM renderer                      |
-| `react-router` | ^8.5.0  | Routing primitives (HashRouter, Routes) |
-| `tailwindcss`  | ^4.3.4  | Utility-first CSS framework             |
-| `axios`        | ^1.20.0 | HTTP client for the `/api` backend      |
+| Package              | Version | Purpose                                   |
+| -------------------- | ------- | ----------------------------------------- |
+| `react`              | ^19.3.1 | UI library                                |
+| `react-dom`          | ^19.3.1 | React DOM renderer                        |
+| `react-router`       | ^8.5.0  | Routing primitives (HashRouter, Routes)   |
+| `tailwindcss`        | ^4.3.4  | Utility-first CSS framework               |
+| `axios`              | ^1.20.0 | HTTP client for the `/api` backend        |
+| `@dnd-kit/core`      | ^6.3.1  | Drag-and-drop context for item reordering |
+| `@dnd-kit/sortable`  | ^10.0.0 | Sortable list primitives                  |
+| `@dnd-kit/utilities` | ^3.2.2  | CSS transform helpers for drag items      |
 
 ### Development
 

@@ -8,8 +8,11 @@ function RouteDisplay() {
   // Determine the parent route
   let parentPath = '/';
   if (pathParts.length > 0) {
-    // If it's a 'todo/:id' route, the parent is '/'
-    if (pathParts[0] === 'todo') {
+    // /todo/:id/create-list-item goes back to the list
+    if (pathParts[0] === 'todo' && pathParts.length === 3 && pathParts[2] === 'create-list-item') {
+      parentPath = `/todo/${pathParts[1]}`;
+    } else if (pathParts[0] === 'todo') {
+      // If it's a 'todo/:id' route, the parent is '/'
       parentPath = '/';
     } else {
       // For other routes, we go one level up
