@@ -302,3 +302,28 @@ paths:
                   - $ref: '#/components/schemas/ListItemCollectionItem'
         '400':
           description: Invalid request body
+
+  /api/list-items/{id}:
+    get:
+      summary: List all items for a todo list
+      tags:
+        - "ListItem"
+      operationId: getListItem
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: The unique identifier of the list item
+      responses:
+        '200':
+          description: The requested list item with self-referential link (HATEOAS)
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ListItem'
+        '404':
+          description: Todo list not found

@@ -2,6 +2,7 @@ package net.watrys.todo.controller;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.util.List;
@@ -56,8 +57,47 @@ public class ListItemController implements ListItemApi {
         throw new UnsupportedOperationException("Unimplemented method 'getListItemsForList'");
     }
 
-    public ResponseEntity<ListItem> getListItem(@NotNull @Valid long listItemId) {
-        return null;
+    @Override
+    @GetMapping("/{id}")
+    public ResponseEntity<ListItem> getListItem(Long listItemId) {
+        net.watrys.todo.model.ListItem entity = repository.getReferenceById(listItemId);
+        ListItem dto = entityToDto(entity);
+        return ResponseEntity.ok(dto);
+    }
+
+    private ListItem entityToDto(net.watrys.todo.model.ListItem entity) {
+        ListItem dto = new ListItem(entity.getTitle(), entity.getPosition(), entityTypeToDtoType(entity.getType()));
+
+        dto.setId(entity.getId());
+
+        dto.setCreatedAt(toODT(entity.getCreatedAt()));
+        dto.setCreatedBy(entity.getCreatedBy());
+        dto.updatedAt(toODT(entity.getUpdatedAt()));
+        dto.setUpdatedBy(entity.getUpdatedBy());
+
+        dto.setParentId(entity.getParentId());
+        dto.setComplete(entity.getComplete());
+
+        dto.setTodoListId(entity.getTodoListId());
+        dto.setParentId(entity.getParentId());
+        dto.setItemText(entity.getItemText());
+        dto.setComplete(entity.getComplete());
+        dto.setType(entityTypeToDtoType(entity.getType()));
+
+        if (entity.getSubItems() != null) {
+            dto.setSubItems(entity.getSubItems().stream().map(this::entityToDto).toList());
+        }
+
+        dto.setSubItems(null);
+
+        return dto;
+    }
+
+    private OffsetDateTime toODT(Instant instant) {
+        if (instant == null) {
+            return null;
+        }
+        return OffsetDateTime.ofInstant(instant, ZoneId.systemDefault());
     }
 
     private net.watrys.todo.model.ListItem dtoToEntity(net.watrys.todo.dto.ListItem dto) {
@@ -118,12 +158,12 @@ public class ListItemController implements ListItemApi {
         }
         ci.setParentTitle(entity.getParentTitle());
         if (entity.getCreatedAt() != null) {
-            ci.setCreatedAt(OffsetDateTime.ofInstant(entity.getCreatedAt(), ZoneId.systemDefault()));
+            ci.setCreatedAt(toODT(entity.getCreatedAt()));
         }
         ci.setCreatedBy(entity.getCreatedBy());
         ci.setUpdatedBy(entity.getUpdatedBy());
         if (entity.getUpdatedAt() != null) {
-            ci.setUpdatedAt(OffsetDateTime.ofInstant(entity.getUpdatedAt(), ZoneId.systemDefault()));
+            ci.setUpdatedAt(toODT(entity.getUpdatedAt()));
         }
         return ci;
     }
