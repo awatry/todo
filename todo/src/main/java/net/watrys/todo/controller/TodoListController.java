@@ -10,6 +10,7 @@ import java.util.List;
 import net.watrys.todo.api.TodoListApi;
 import net.watrys.todo.assembler.TodoListAssembler;
 import net.watrys.todo.dto.ListItem;
+import net.watrys.todo.dto.ListItemType;
 import net.watrys.todo.dto.TodoListCollectionItem;
 import net.watrys.todo.exception.TodoListNotFoundException;
 import net.watrys.todo.exception.TodoListSaveException;
@@ -125,15 +126,15 @@ public class TodoListController implements TodoListApi {
         return ci;
     }
 
-    static ListItem.TypeEnum entityTypeToDtoType(net.watrys.todo.model.ListItem.ItemType entityType) {
+    static ListItemType entityTypeToDtoType(net.watrys.todo.model.ListItem.ItemType entityType) {
         if (entityType == null) {
             return null;
         }
         switch (entityType) {
             case LIST_ITEM:
-                return ListItem.TypeEnum.LIST_ITEM;
+                return ListItemType.LIST_ITEM;
             case SECTION:
-                return ListItem.TypeEnum.SECTION;
+                return ListItemType.SECTION;
             default:
                 throw new IllegalArgumentException("Unknown enum type");
         }

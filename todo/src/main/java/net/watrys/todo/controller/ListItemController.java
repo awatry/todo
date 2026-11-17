@@ -9,6 +9,7 @@ import net.watrys.todo.api.ListItemApi;
 import net.watrys.todo.assembler.ListItemAssembler;
 import net.watrys.todo.dto.ListItem;
 import net.watrys.todo.dto.ListItemCollectionItem;
+import net.watrys.todo.dto.ListItemType;
 import net.watrys.todo.repository.ListItemRepository;
 import net.watrys.todo.repository.TodoListRepository;
 import org.springframework.hateoas.EntityModel;
@@ -72,7 +73,7 @@ public class ListItemController implements ListItemApi {
         return entity;
     }
 
-    private net.watrys.todo.model.ListItem.ItemType dtoTypeToEntityType(ListItem.TypeEnum dtoType) {
+    private net.watrys.todo.model.ListItem.ItemType dtoTypeToEntityType(ListItemType dtoType) {
         if (dtoType == null) {
             return null;
         }
@@ -86,15 +87,15 @@ public class ListItemController implements ListItemApi {
         }
     }
 
-    private ListItemCollectionItem.TypeEnum entityTypeToDtoType(net.watrys.todo.model.ListItem.ItemType entityType) {
+    private ListItemType entityTypeToDtoType(net.watrys.todo.model.ListItem.ItemType entityType) {
         if (entityType == null) {
             return null;
         }
         switch (entityType) {
             case LIST_ITEM:
-                return ListItemCollectionItem.TypeEnum.LIST_ITEM;
+                return ListItemType.LIST_ITEM;
             case SECTION:
-                return ListItemCollectionItem.TypeEnum.SECTION;
+                return ListItemType.SECTION;
             default:
                 throw new IllegalArgumentException("Unknown enum type");
         }
