@@ -75,6 +75,7 @@ public class ListItemController implements ListItemApi {
         dto.updatedAt(toODT(entity.getUpdatedAt()));
         dto.setUpdatedBy(entity.getUpdatedBy());
 
+        dto.setParentTitle(entity.getParentTitle());
         dto.setParentId(entity.getParentId());
         dto.setComplete(entity.getComplete());
 
@@ -87,8 +88,6 @@ public class ListItemController implements ListItemApi {
         if (entity.getSubItems() != null) {
             dto.setSubItems(entity.getSubItems().stream().map(this::entityToDto).toList());
         }
-
-        dto.setSubItems(null);
 
         return dto;
     }
