@@ -7,6 +7,7 @@ import { HashRouter, Routes, Route, Link, useParams } from 'react-router';
 import TodoList from '@/components/TodoList';
 import CreateTodoList from '@/components/CreateTodoList';
 import CreateListItem from '@/components/CreateListItem';
+import ListItemDetail from './components/ListItemDetail';
 import RouteDisplay from './components/RouteDisplay';
 import {
   DndContext,
@@ -116,6 +117,16 @@ function CreateTodoListRoute() {
   );
 }
 
+function ListItemRoute() {
+  const { id, itemId } = useParams<{ id: string; itemId: string }>();
+  return (
+    <div>
+      <RouteDisplay />
+      <ListItemDetail id={id ?? ''} itemId={itemId ?? ''} />
+    </div>
+  );
+}
+
 function CreateListItemRoute() {
   const { id } = useParams<{ id: string }>();
   return (
@@ -197,6 +208,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/todo/:id" element={<TodoListRoute />} />
         <Route path="/todo/:id/create-list-item" element={<CreateListItemRoute />} />
+        <Route path="/todo/:id/item/:itemId" element={<ListItemRoute />} />
         <Route path="/create-todo-list" element={<CreateTodoListRoute />} />
       </Routes>
     </div>

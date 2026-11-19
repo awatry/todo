@@ -7,10 +7,10 @@ import { Link, useNavigate } from 'react-router';
 /** Represents a single task or section item in the todo list. */
 export interface TodoItem {
   id: string;
-  type: 'SECTION' | 'TODO';
+  type: 'SECTION' | 'LIST_ITEM';
   title: string;
-  complete: boolean /* Relevant for TODO items */;
-  itemText: string /* Relevant for TODO items */;
+  complete: boolean /* Relevant for LIST_ITEM items */;
+  itemText: string /* Relevant for LIST_ITEM items */;
 }
 
 /** Represents the entire todo list structure. */
@@ -170,7 +170,9 @@ const TodoList = (props: TodoListProps) => {
                     }
                     className="todo-checkbox"
                   />
-                  <span className="todo-title">{topLevelItem.title}</span>
+                  <Link to={`/todo/${props.id}/item/${topLevelItem.id}`} className="todo-title">
+                    {topLevelItem.title}
+                  </Link>
                   <p className="item-text">{topLevelItem.itemText}</p>
                 </div>
               )}
