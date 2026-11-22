@@ -97,20 +97,14 @@ const ListItemDetail = (props: TodoListProps) => {
           {listItem.type === 'SECTION' ? 'Section' : 'List Item'}: {listItem.title}
         </h1>
         <div className="space-y-2">
-          <p>
-            <strong>ID:</strong> {listItem.id}
-          </p>
-          <p>
-            <strong>Type:</strong> {listItem.type}
-          </p>
+          {listItem.type !== 'SECTION' && listItem.complete !== undefined && (
+            <p>
+              <strong>Complete:</strong> {listItem.complete}
+            </p>
+          )}
           {listItem.itemText && (
             <p>
               <strong>Text:</strong> {listItem.itemText}
-            </p>
-          )}
-          {listItem.complete !== undefined && (
-            <p>
-              <strong>Complete:</strong> {listItem.complete}
             </p>
           )}
           <p>
