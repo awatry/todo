@@ -327,3 +327,23 @@ paths:
                   - $ref: '#/components/schemas/ListItem'
         '404':
           description: Todo list not found
+
+    delete:
+      summary: Delete a list item
+      tags:
+        - "ListItem"
+      operationId: deleteListItemById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: The unique identifier of the list item to delete
+      responses:
+        '204':
+          description: List item deleted successfully
+        '404':
+          description: List item not found
+

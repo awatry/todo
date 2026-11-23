@@ -16,6 +16,7 @@ import net.watrys.todo.repository.TodoListRepository;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -48,6 +49,13 @@ public class ListItemController implements ListItemApi {
         return ResponseEntity.created(
                         entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
                 .body(dto);
+    }
+
+    @Override
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteListItemById(Long id) {
+        repository.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 
     @Override
