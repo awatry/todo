@@ -173,7 +173,6 @@ const TodoList = (props: TodoListProps) => {
                   <Link to={`/todo/${props.id}/item/${topLevelItem.id}`} className="todo-title">
                     {topLevelItem.title}
                   </Link>
-                  <p className="item-text">{topLevelItem.itemText}</p>
                 </div>
               )}
             </li>
