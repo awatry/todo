@@ -259,28 +259,6 @@ paths:
           description: Todo list not found
 
   /api/list-items:
-    get:
-      summary: List all items for a todo list
-      tags:
-        - "ListItem"
-      parameters:
-        - name: listId
-          in: query
-          required: true
-          schema:
-            type: integer
-            format: int64
-          description: The unique identifier of the todo list to load items for
-      operationId: getListItemsForList
-      responses:
-        '200':
-          description: A collection of todo list items with self-referential links (HATEOAS)
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/ListItemCollectionItem'
     post:
       summary: Create a new todo list item
       tags:
@@ -298,8 +276,7 @@ paths:
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '#/components/schemas/ListItemCollectionItem'
+                $ref: '#/components/schemas/ListItemCollectionItem'
         '400':
           description: Invalid request body
 
@@ -327,7 +304,34 @@ paths:
                   - $ref: '#/components/schemas/ListItem'
         '404':
           description: Todo list not found
-
+    put:
+      summary: Update an existing todo list item
+      tags:
+        - "ListItem"
+      operationId: updateListItem
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: The unique identifier of the todo list
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ListItem'
+      responses:
+        '200':
+          description: Todo list item updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListItem'
+        '400':
+          description: Invalid request body
     delete:
       summary: Delete a list item
       tags:

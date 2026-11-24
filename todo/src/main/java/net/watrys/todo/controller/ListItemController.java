@@ -5,7 +5,6 @@ import jakarta.validation.constraints.NotNull;
 import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
-import java.util.List;
 import net.watrys.todo.api.ListItemApi;
 import net.watrys.todo.assembler.ListItemAssembler;
 import net.watrys.todo.dto.ListItem;
@@ -47,7 +46,7 @@ public class ListItemController implements ListItemApi {
         ListItemCollectionItem dto = entityToCollectionItem(entityModel.getContent());
 
         return ResponseEntity.created(
-                        entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
+                entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
                 .body(dto);
     }
 
@@ -56,13 +55,6 @@ public class ListItemController implements ListItemApi {
     public ResponseEntity<Void> deleteListItemById(Long id) {
         repository.deleteById(id);
         return ResponseEntity.noContent().build();
-    }
-
-    @Override
-    @GetMapping
-    public ResponseEntity<List<ListItemCollectionItem>> getListItemsForList(@NotNull @Valid Long listId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getListItemsForList'");
     }
 
     @Override
@@ -107,8 +99,16 @@ public class ListItemController implements ListItemApi {
         return OffsetDateTime.ofInstant(instant, ZoneId.systemDefault());
     }
 
+    public ResponseEntity<ListItem> getListItem(@NotNull @Valid long listItemId) {
+        return null;
+    }
+
     private net.watrys.todo.model.ListItem dtoToEntity(net.watrys.todo.dto.ListItem dto) {
         net.watrys.todo.model.ListItem entity = new net.watrys.todo.model.ListItem();
+        return mergeDtoToEntity(dto, entity);
+    }
+
+    private net.watrys.todo.model.ListItem mergeDtoToEntity(ListItem dto, net.watrys.todo.model.ListItem entity) {
         entity.setTitle(dto.getTitle());
         entity.setPosition(dto.getPosition());
         entity.setTodoListId(dto.getTodoListId());
@@ -173,5 +173,19 @@ public class ListItemController implements ListItemApi {
             ci.setUpdatedAt(toODT(entity.getUpdatedAt()));
         }
         return ci;
+    }
+
+    @Override
+    public ResponseEntity<ListItem> updateListItem(Long id, @Valid ListItem listItem) {
+        net.watrys.todo.model.ListItem savedList = repository.getReferenceById(id);
+        savedList = mergeDtoToEntity(listItem, savedList);
+        savedList = repository.save(savedList);
+
+        ListItem dto = entityToDto(savedList);
+
+        EntityModel<net.watrys.todo.model.ListItem> entityModel = assembler.toModel(savedList);
+        return ResponseEntity.created(
+                entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
+                .body(dto);
     }
 }
