@@ -46,7 +46,7 @@ public class ListItemController implements ListItemApi {
         ListItemCollectionItem dto = entityToCollectionItem(entityModel.getContent());
 
         return ResponseEntity.created(
-                entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
+                        entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
                 .body(dto);
     }
 
@@ -185,7 +185,7 @@ public class ListItemController implements ListItemApi {
 
         EntityModel<net.watrys.todo.model.ListItem> entityModel = assembler.toModel(savedList);
         return ResponseEntity.created(
-                entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
+                        entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
                 .body(dto);
     }
 }
